@@ -11,7 +11,6 @@
     level: 'full',
     showOriginal: false,
     userExceptions: [],
-    reportMode: false,
   };
 
   // Pre-hide: скрыли body через prehide.css, снимем класс после первого перевода
@@ -36,7 +35,6 @@
       enabled: settings.enabled,
       showOriginal: settings.showOriginal,
       userExceptions: settings.userExceptions,
-      reportMode: settings.reportMode,
     });
     translator.startObserver();
     if (settings.enabled) {

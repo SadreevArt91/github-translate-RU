@@ -19,6 +19,15 @@
     'Your organizations': 'Ваши организации',
     'Your sponsors': 'Ваши спонсоры',
     'Your enterprises': 'Ваши корпоративные аккаунты',
+
+    // Короткие варианты пунктов из нового меню аккаунта (без «Your»)
+    'Profile': 'Профиль',
+    'Copilot settings': 'Настройки Copilot',
+    'Copilot': 'Copilot', // бренд, не переводим
+    'Try Enterprise': 'Попробовать Enterprise',
+    'Enterprise': 'Enterprise',
+    // Sponsors — бренд, оставляем как есть (см. глоссарий)
+
     'Upgrade': 'Перейти на новый план',
     'Feature preview': 'Предпросмотр функций',
     'Help': 'Справка',
@@ -91,6 +100,18 @@
     },
   };
 
+  // Контекстные правила nav — бейджи «New»/«Free» только внутри меню аккаунта/глобальной навигации,
+  // чтобы не конфликтовать с «New» в списках Issues/PR и т.п.
+  const contextual = [
+    {
+      selector: 'header, nav, [role="menu"], [aria-label*="user" i], [aria-label*="account" i], [aria-label*="menu" i], .js-global-bar, .AppHeader, [data-hpc] header',
+      strings: {
+        'New': 'Новое',
+        'Free': 'Бесплатно',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.nav = { strings, attributes };
+  root.GitHubRu.dict.nav = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -40,7 +40,6 @@
     level: 'full',
     showOriginal: false,
     userExceptions: new Set(),
-    reportMode: false,
     index: { text: new Map(), attrs: {} },
     processed: new WeakSet(),      // обработанные текстовые узлы
     originals: new WeakMap(),      // node → [original, translated]
@@ -102,19 +101,46 @@
 
     if (state.userExceptions.has(core)) return null;
 
-    // 1) Контекстные правила (селектор-зависимые) - побеждают глобальный словарь
+    // 1) Контекстные правила побеждают глобальный словарь
     let translated = lookupContextual(core, parentEl);
-    // 2) Глобальный плоский словарь
+    // 2) Глобальный плоский словарь — точное совпадение
     if (!translated) translated = state.index.text.get(core);
+
+    // 2b) Нормализация whitespace: многострочный HTML-текст в одной ноде
+    //     (например, <p class="note"> с переносами и отступами).
+    let normCore = null;
+    if (!translated) {
+      if (/\s{2,}|[\n\r\t]/.test(core)) {
+        normCore = core.replace(/\s+/g, ' ');
+        translated = lookupContextual(normCore, parentEl);
+        if (!translated) translated = state.index.text.get(normCore);
+      }
+    }
+
+    // 2c) Trailing-пунктуация: "Security policy •", "Dependabot alerts :",
+    //     "Reviewers —" и т.п. DOM GitHub часто склеивает заголовок и
+    //     разделитель в один текстовый узел. Срежем хвост и попробуем lookup.
+    if (!translated) {
+      const base = normCore || core;
+      const mPunct = base.match(/^(.+?)[\s]*([•·–—\-:])\s*$/);
+      if (mPunct) {
+        const stripped = mPunct[1].replace(/\s+$/, '');
+        const tail = ' ' + mPunct[2];
+        let t2 = lookupContextual(stripped, parentEl);
+        if (!t2) t2 = state.index.text.get(stripped);
+        if (t2) translated = t2 + tail;
+      }
+    }
+
     // 3) Время (relative time и т.п.)
     if (!translated) {
-      const t = translateTime && translateTime(core);
+      const t = translateTime && translateTime(normCore || core);
       if (t) translated = t;
     }
     if (!translated) return null;
 
     if (state.showOriginal && translated !== core) {
-      translated = `${translated} (${core})`;
+      translated = `${translated} (${normCore || core})`;
     }
     if (start === 0 && end === raw.length) return translated;
     return raw.slice(0, start) + translated + raw.slice(end);
@@ -128,12 +154,6 @@
     }
     const next = lookupText(node.nodeValue, node.parentElement);
     if (next == null) {
-      if (state.reportMode) {
-        const parent = node.parentElement;
-        if (parent && !parent.hasAttribute('data-ghru-untranslated')) {
-          parent.setAttribute('data-ghru-untranslated', '1');
-        }
-      }
       state.processed.add(node);
       return;
     }
@@ -178,6 +198,11 @@
       const specific = state.index.attrs[attr];
       let translated = specific && specific.get(core);
       if (!translated) translated = state.index.text.get(core);
+
+      if (!translated && /\s{2,}|[\n\r\t]/.test(core)) {
+        const normCore = core.replace(/\s+/g, ' ');
+        translated = (specific && specific.get(normCore)) || state.index.text.get(normCore);
+      }
 
       if (!done) { done = new Set(); state.elementDone.set(el, done); }
 
@@ -395,7 +420,6 @@
     if (Array.isArray(settings.userExceptions)) {
       state.userExceptions = new Set(settings.userExceptions);
     }
-    if (typeof settings.reportMode === 'boolean') state.reportMode = settings.reportMode;
     if (needsRebuild) {
       setIndex(settings.level || state.level);
       state.processed = new WeakSet();

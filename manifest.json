@@ -38,6 +38,8 @@
         "src/dictionary/settings.js",
         "src/dictionary/profile.js",
         "src/dictionary/notifications.js",
+        "src/dictionary/security.js",
+        "src/dictionary/insights.js",
         "src/dictionary/time.js",
         "src/dictionary/user-extras.js",
         "src/dictionary/index.js",

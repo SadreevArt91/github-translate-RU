@@ -10,12 +10,12 @@
   // Порядок модулей: поздние ПЕРЕОПРЕДЕЛЯЮТ ранние в плоском словаре.
   const MODULES = [
     'common', 'nav', 'repo', 'issues', 'pr',
-    'actions', 'settings', 'profile', 'notifications', 'user-extras',
+    'actions', 'settings', 'profile', 'notifications', 'security', 'insights', 'user-extras',
   ];
 
   const LEVELS = {
     minimal: new Set(['common', 'nav', 'user-extras']),
-    standard: new Set(['common', 'nav', 'repo', 'issues', 'pr', 'notifications', 'profile', 'user-extras']),
+    standard: new Set(['common', 'nav', 'repo', 'issues', 'pr', 'notifications', 'profile', 'insights', 'user-extras']),
     full: new Set(MODULES),
   };
 

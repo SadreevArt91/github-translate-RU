@@ -3,7 +3,6 @@ const DEFAULTS = {
   enabled: true,
   level: 'full',
   showOriginal: false,
-  reportMode: false,
   userExceptions: [],
 };
 
@@ -14,7 +13,6 @@ async function load() {
   $('enabled').checked = !!s.enabled;
   $('level').value = s.level || 'full';
   $('showOriginal').checked = !!s.showOriginal;
-  $('reportMode').checked = !!s.reportMode;
   $('userExceptions').value = (s.userExceptions || []).join('\n');
 }
 
@@ -28,7 +26,6 @@ async function save() {
     enabled: $('enabled').checked,
     level: $('level').value,
     showOriginal: $('showOriginal').checked,
-    reportMode: $('reportMode').checked,
     userExceptions,
   });
 
@@ -44,7 +41,7 @@ $('openShortcuts').addEventListener('click', (e) => {
 });
 
 // Автосохранение чекбоксов/селекта
-['enabled', 'level', 'showOriginal', 'reportMode'].forEach(id => {
+['enabled', 'level', 'showOriginal'].forEach(id => {
   $(id).addEventListener('change', save);
 });
 

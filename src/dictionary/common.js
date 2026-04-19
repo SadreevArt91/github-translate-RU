@@ -79,8 +79,7 @@
     'Optional': 'Необязательно',
     'Yes': 'Да',
     'No': 'Нет',
-    'On': 'Вкл',
-    'Off': 'Выкл',
+    // 'On'/'Off' перенесены в contextual (только для тогглов), чтобы «On main,» не превращалось в «Вкл main,».
 
     // Пагинация
     'Older': 'Старее',
@@ -184,11 +183,74 @@
     'Nothing here yet': 'Пока здесь пусто',
     'There is nothing to show.': 'Нечего показать.',
     'Try a different search': 'Попробуйте другой запрос',
+    // Сессия / сеть / общие ошибки
+    'You signed in with another tab or window.': 'Вы вошли в аккаунт в другой вкладке или окне.',
+    'You signed out in another tab or window.': 'Вы вышли из аккаунта в другой вкладке или окне.',
+    'You switched accounts on another tab or window.':
+      'Вы переключили аккаунт в другой вкладке или окне.',
+    'Reload': 'Перезагрузить',
+    'Reload to refresh your session.': 'Перезагрузите, чтобы обновить сессию.',
+    'to refresh your session.': 'чтобы обновить сессию.',
+    'You can\u2019t perform that action at this time.':
+      'Сейчас это действие недоступно.',
+    'You can\'t perform that action at this time.':
+      'Сейчас это действие недоступно.',
+    'There was an error while loading.': 'При загрузке произошла ошибка.',
+    'Please reload this page': 'Перезагрузите страницу',
+    'Uh oh!': 'Ой!',
+
+    // Feedback / saved searches
+    'We read every piece of feedback, and take your input very seriously.':
+      'Мы читаем каждый отзыв и очень серьёзно относимся к вашему мнению.',
+    'Provide feedback': 'Оставить отзыв',
+    'Submit feedback': 'Отправить отзыв',
+    'Give feedback': 'Оставить отзыв',
+    'Saved searches': 'Сохранённые поиски',
+    'Create saved search': 'Создать сохранённый поиск',
+    'Use saved searches to filter your results more quickly':
+      'Используйте сохранённые поиски, чтобы быстрее фильтровать результаты',
+    'Search code, repositories, users, issues, pull requests...':
+      'Поиск по коду, репозиториям, пользователям, задачам и пул-реквестам...',
+    'To see all available qualifiers, see our': 'Все доступные квалификаторы — в нашей',
+    'documentation': 'документации',
+
+    // Верх страницы / навигация
+    'Skip to content': 'Пропустить к содержимому',
+    'Create new...': 'Создать…',
+    'Create new': 'Создать',
+    'Open menu': 'Открыть меню',
+    'Dismiss alert': 'Скрыть уведомление',
+    'Dismiss': 'Скрыть',
+    'Repository navigation': 'Навигация по репозиторию',
+    'Footer navigation': 'Навигация в подвале',
+    'Code scanning': 'Сканирование кода',
+    'Cloud agent': 'Облачный агент',
+
+
+    // Клавиатурные подсказки
+    'to search': 'для поиска',
+    'Up to': 'До',
+    '(forward slash)': '(слэш)',
+    '(g then d)': '(g, затем d)',
+
+
   };
 
   const attributes = {};
 
   root.GitHubRu = root.GitHubRu || {};
-  root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.common = { strings, attributes };
+    // Контекстные правила common:
+  // «On»/«Off» — только для тогглов/свитчей/checkbox, иначе портит Pulse-фразы вида «On main,».
+  const contextual = [
+    {
+      selector: 'input[type="checkbox"] ~ *, .form-toggle, .js-toggle, [role="switch"], .ToggleSwitch, [data-toggle], [aria-pressed], [aria-checked]',
+      strings: {
+        'On': 'Вкл',
+        'Off': 'Выкл',
+      },
+    },
+  ];
+
+root.GitHubRu.dict = root.GitHubRu.dict || {};
+  root.GitHubRu.dict.common = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -81,6 +81,20 @@
       re: /^No contributions on (.+)$/i,
       build: m => `Нет вкладов — ${m[1]}`,
     },
+
+    // Wiki: "Welcome to the <repo> wiki!" — <repo> не переводим
+    {
+      re: /^Welcome to the (.+) wiki!$/,
+      build: m => `Добро пожаловать в Wiki репозитория ${m[1]}!`,
+    },
+
+    // Настройки / модалки с именем репо
+    { re: /^Settings:\s+(.+)$/,          build: m => `Настройки: ${m[1]}` },
+    { re: /^Make\s+(.+?)\s+private$/,    build: m => `Сделать ${m[1]} приватным` },
+    { re: /^Make\s+(.+?)\s+public$/,     build: m => `Сделать ${m[1]} публичным` },
+    { re: /^Delete\s+(.+)$/,             build: m => `Удалить ${m[1]}` },
+    { re: /^Transfer\s+(.+)$/,           build: m => `Передать ${m[1]}` },
+    { re: /^Archive\s+(.+)$/,            build: m => `Архивировать ${m[1]}` },
   ];
 
   function translateTime(text) {

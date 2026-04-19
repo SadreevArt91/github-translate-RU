@@ -112,6 +112,27 @@
     // Кнопки внизу
     'Delete branch': 'Удалить ветку',
     'Restore branch': 'Восстановить ветку',
+
+    // Пустая страница списка PR
+    'Welcome to pull requests!': 'Добро пожаловать в пул-реквесты!',
+    'Pull requests help you collaborate on code with other people. As pull requests are created, they\'ll appear here in a searchable and filterable list. To get started, you should':
+      'Пул-реквесты помогают совместно работать над кодом. Когда они будут созданы, они появятся здесь в виде списка с поиском и фильтрами. Чтобы начать, вам нужно',
+    'Pull requests help you collaborate on code with other people. As pull requests are created, they\u2019ll appear here in a searchable and filterable list. To get started, you should':
+      'Пул-реквесты помогают совместно работать над кодом. Когда они будут созданы, они появятся здесь в виде списка с поиском и фильтрами. Чтобы начать, вам нужно',
+    'create a pull request': 'создать пул-реквест',
+
+    // Баннер «Label issues and pull requests for new contributors»
+    'Label issues and pull requests for new contributors':
+      'Отмечайте задачи и пул-реквесты для новых контрибьюторов',
+    'Now, GitHub will help potential first-time contributors':
+      'Теперь GitHub будет помогать потенциальным новым контрибьюторам',
+    'discover issues': 'находить задачи',
+    'labeled with': 'помеченные меткой',
+    'Dismiss': 'Скрыть',
+
+    // ProTip
+    'ProTip!': 'Совет!',
+    'Exclude everything labeled': 'Исключить всё помеченное меткой',
   };
 
   const attributes = {

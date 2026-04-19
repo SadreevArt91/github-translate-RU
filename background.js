@@ -7,7 +7,6 @@ const DEFAULTS = {
   level: 'standard', // 'minimal' | 'standard' | 'full'
   showOriginal: false,
   userExceptions: [], // массив строк, которые пользователь хочет оставить без перевода
-  reportMode: false,  // если включено, подсвечивает непереведённые UI-строки
 };
 
 // Инициализация настроек при установке / обновлении
