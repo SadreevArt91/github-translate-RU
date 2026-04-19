@@ -4,26 +4,6 @@
 
 Главный принцип: **переводим только UI, не трогаем код, имена и пользовательский контент.**
 
-## Что переводится
-
-- Навигация (шапка, меню, dashboard).
-- Кнопки и формы (Save, Cancel, Create…).
-- Метки разделов на странице репозитория, PR и Issues.
-- Сообщения чек-листов и CI, фильтры, пагинация.
-- Подписи в Settings (личных, репозитория, организации).
-- Раздел уведомлений.
-- Относительные даты («2 days ago» → «2 дня назад»).
-
-## Что НЕ переводится (намеренно)
-
-- Содержимое `<code>`, `<pre>`, diff, blob и любых редакторов кода.
-- README, wiki, тело issues и PR, комментарии.
-- Имена репозиториев, веток, тегов, файлов.
-- Имена пользователей и организаций (`@username`, `org/repo`).
-- SHA-хэши, номера PR/issue, URL.
-- Бренды и команды Git (`git commit`, `push`, `merge`, `rebase`, `HEAD`, `main`, `origin`).
-- Названия продуктов: `GitHub Actions`, `Codespaces`, `Copilot`, `Dependabot`, `Marketplace`, `Pages`, `Discussions`, `Packages`, `Projects`, `Sponsors`.
-
 ## Установка (для разработки)
 
 ### Chrome / Edge / Brave
@@ -40,25 +20,39 @@ Manifest V3 в Firefox имеет нюансы. Для разработки:
 1. Откройте `about:debugging#/runtime/this-firefox`.
 2. Нажмите «Загрузить временное дополнение…» и выберите `manifest.json`.
 
+## Что переводится
+
+- Навигация (шапка, меню, dashboard).
+- Кнопки и формы (Save, Cancel, Create…).
+- Метки разделов на странице репозитория, PR и Issues.
+- Сообщения чек-листов и CI, фильтры, пагинация.
+- Подписи в Settings (личных, репозитория, организации).
+- Вкладка Insights (Pulse, Contributors, Community, Traffic, Commits, Code frequency, Dependency graph, Network, Forks, Actions metrics).
+- Вкладка Security (Overview, Dependabot, Code scanning, Secret scanning, Policy, Advisories).
+- Раздел уведомлений.
+- Относительные даты («2 days ago» → «2 дня назад»).
+
+## Что НЕ переводится (намеренно)
+
+- Содержимое `<code>`, `<pre>`, diff, blob и любых редакторов кода.
+- README, wiki, тело issues и PR, комментарии.
+- Имена репозиториев, веток, тегов, файлов.
+- Имена пользователей и организаций (`@username`, `org/repo`).
+- SHA-хэши, номера PR/issue, URL.
+- Бренды и команды Git (`git commit`, `push`, `merge`, `rebase`, `HEAD`, `main`, `origin`).
+- Названия продуктов: `GitHub Actions`, `Codespaces`, `Copilot`, `Dependabot`, `Marketplace`, `Pages`, `Discussions`, `Packages`, `Projects`, `Sponsors`.
+
 ## Как пользоваться
 
 - **Иконка расширения** — popup с быстрым переключателем перевода и уровнем.
 - **Alt + Shift + L** — горячая клавиша toggle.
-- **Страница настроек** — выбор уровня, режим «показать оригинал в скобках», список исключений, режим отчёта.
+- **Страница настроек** — выбор уровня, режим «показать оригинал в скобках», список исключений.
 
 ### Уровни перевода
 
 - **Минимальный** — только навигация и общие кнопки.
-- **Стандартный** — плюс репозитории, задачи, пул-реквесты, профиль, уведомления.
-- **Полный** — включая Settings и GitHub Actions.
-
-### Режим отчёта
-
-Включает атрибут `data-ghru-untranslated="1"` на родителях непереведённых строк. Полезно, чтобы стилем подсветить непокрытое и пополнить словарь:
-
-```css
-[data-ghru-untranslated] { outline: 1px dashed #ff5; }
-```
+- **Стандартный** — плюс репозитории, задачи, пул-реквесты, профиль, уведомления, Insights.
+- **Полный** — включая Settings, GitHub Actions и Security.
 
 ## Архитектура
 
@@ -79,7 +73,10 @@ github-russian/
 │   │   ├── settings.js        — Settings (личные, репо, организация)
 │   │   ├── profile.js         — Профиль
 │   │   ├── notifications.js   — Inbox
+│   │   ├── insights.js        — вкладка Insights
+│   │   ├── security.js        — вкладка Security
 │   │   ├── time.js            — относительное время (regex)
+│   │   ├── user-extras.js     — место под пользовательские добавки
 │   │   └── index.js           — агрегатор + уровни
 │   ├── content/
 │   │   ├── prehide.css        — pre-hide, чтобы не мигало по-английски
@@ -89,6 +86,7 @@ github-russian/
 │   ├── popup/                 — popup
 │   └── options/               — страница настроек
 ├── icons/                     — иконки (положите свои 16/48/128)
+├── tools/                     — вспомогательные скрипты сверки словаря
 ├── README.md
 ├── CONTRIBUTING.md
 ├── GLOSSARY.md
@@ -115,12 +113,14 @@ github-russian/
 6. Settings (личные + репо).
 7. Поиск — фасеты переведены, результаты — нет.
 8. Actions — UI переведён, имена workflow и логи **не** переведены.
-9. Discussions — UI, контент — нет.
-10. Profile — UI, био и закреплённые репозитории — нет.
-11. Organization, Teams.
-12. Copilot / Codespaces — названия **не** переводятся.
-13. Gist — UI.
-14. Notifications inbox.
+9. Insights — Pulse, Contributors, Community, Traffic и т.д.
+10. Security — Overview и под-вкладки.
+11. Discussions — UI, контент — нет.
+12. Profile — UI, био и закреплённые репозитории — нет.
+13. Organization, Teams.
+14. Copilot / Codespaces — названия **не** переводятся.
+15. Gist — UI.
+16. Notifications inbox.
 
 ## Лицензия
 
