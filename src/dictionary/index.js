@@ -8,7 +8,7 @@
   // Сначала общие кнопки и формы, затем — специфичные разделы.
   const MODULES = [
     'common', 'nav', 'repo', 'issues', 'pr',
-    'actions', 'settings', 'profile', 'notifications',
+    'actions', 'settings', 'profile', 'notifications', 'user-extras',
   ];
 
   // Уровни перевода для настройки «уровень переводов»
@@ -16,8 +16,8 @@
   // standard — плюс repo/pr/issues/notifications
   // full — всё
   const LEVELS = {
-    minimal: new Set(['common', 'nav']),
-    standard: new Set(['common', 'nav', 'repo', 'issues', 'pr', 'notifications', 'profile']),
+    minimal: new Set(['common', 'nav', 'user-extras']),
+    standard: new Set(['common', 'nav', 'repo', 'issues', 'pr', 'notifications', 'profile', 'user-extras']),
     full: new Set(MODULES),
   };
 

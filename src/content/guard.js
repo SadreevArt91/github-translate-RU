@@ -1,81 +1,127 @@
-// content/guard.js — функция isTranslatable(node) и блеклист контейнеров.
+// content/guard.js — быстрые проверки "можно ли переводить".
 //
 // Главный принцип: ЛУЧШЕ НЕ ПЕРЕВЕСТИ, ЧЕМ ПЕРЕВЕСТИ ЛИШНЕЕ.
-// Поэтому защищаем всё, что хоть чуть-чуть похоже на пользовательский
-// контент или код. Сами текстовые узлы дополнительно проверяются по
-// словарю — если строки нет в словаре, мы её и не трогаем.
+// Оптимизирован:
+//  • hasForbiddenAncestor мемоизируется per-element в WeakMap
+//  • форбид-селектор разделён на три уровня скорости:
+//      1) tag          — проверка по tagName (O(1))
+//      2) class tokens — проверка по classList (O(k), k — кол-во классов)
+//      3) prefix       — className starts-with (для react-code-*, react-blob-*)
+//      4) matches()    — только для редких составных селекторов
+//  • walker может reject'ить поддерево по tag'у БЕЗ подъёма вверх.
 
 (function (root) {
-  // Теги, в которые мы вообще никогда не лезем
+  // 1) Теги, в которые вообще никогда не лезем (rejected в walker)
   const FORBIDDEN_TAGS = new Set([
     'SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'IFRAME',
     'CODE', 'PRE', 'KBD', 'SAMP', 'VAR',
     'TEXTAREA', 'INPUT', 'SELECT', 'OPTION',
-    'svg', 'SVG', 'path', 'PATH',
+    'SVG',
   ]);
 
-  // Селекторы-блеклисты: ближайший предок-совпадение → не переводим
-  const FORBIDDEN_SELECTOR = [
-    // Код, подсветка, diff, blob
-    '.blob-code', '.blob-num', '.blob-wrapper',
-    '.highlight', '.highlight-source', '.highlight-text',
-    '[class*="react-code-"]', '[class*="react-blob-"]',
-    '[data-testid="code-content"]',
-    '.diff-table', '.file-diff', '.js-file-content',
-    '.CodeMirror', '.cm-editor', '.cm-content', '.cm-line',
-    '.monaco-editor',
+  // 2) Отдельные классы — matches() избыточен, работает с classList
+  const FORBIDDEN_CLASS_TOKENS = new Set([
+    'blob-code', 'blob-num', 'blob-wrapper',
+    'highlight', 'highlight-source', 'highlight-text',
+    'diff-table', 'file-diff', 'js-file-content',
+    'CodeMirror', 'cm-editor', 'cm-content', 'cm-line',
+    'monaco-editor',
+    'markdown-body', 'comment-body', 'js-comment-body',
+    'js-issue-title', 'markdown-title',
+    'user-mention', 'team-mention',
+    'commit-ref', 'commit-author', 'commit-tease-sha', 'commit-id',
+    'sha', 'sha-block',
+    'final-path',
+    'branch-name',
+    'suggester-container', 'autocomplete-results',
+    'tree-browser-result',
+  ]);
 
-    // Markdown / пользовательский контент
-    '.markdown-body', '.comment-body', '.js-comment-body',
-    '.js-issue-title', '.markdown-title',
-    '[data-testid="markdown-body"]',
+  // 3) Префиксы className (react-code-*, react-blob-*)
+  const FORBIDDEN_CLASS_PREFIXES = ['react-code-', 'react-blob-'];
 
-    // Пользовательские идентификаторы
-    '.user-mention', '.team-mention', '.commit-ref',
-    '.commit-author', '.commit-tease-sha', '.commit-id',
-    '.sha', '.sha-block',
-    '.author', '.opened-by',
-    '[data-hovercard-type="user"]',
-    '[data-hovercard-type="repository"]',
-    '[data-hovercard-type="commit"]',
+  // 4) Data-атрибуты: проверяются через dataset/getAttribute
+  const FORBIDDEN_DATA = [
+    ['testid', new Set(['code-content', 'markdown-body', 'file-name'])],
+    ['hovercardType', new Set(['user', 'repository', 'commit'])],
+  ];
 
-    // Имена файлов / путей
-    '.file-info a', '.final-path',
-    '[data-testid="file-name"]', '[aria-label="file name"]',
-    '.breadcrumb a strong', // последний сегмент пути файла
-    '.tree-browser-result',
-
-    // Поля ввода и редактируемые области
-    '[contenteditable="true"]', '[contenteditable=""]',
-
-    // Выпадающие списки веток / тегов / репозиториев
-    '.branch-name', '.css-truncate-target.branch',
-    '[data-testid="anchor-button"][data-hovercard-type]',
-
-    // Подсказки автодополнения, которые показывают чужие данные
-    '.suggester-container', '.autocomplete-results',
+  // 5) Сложное — для этого всё ещё нужен matches(). Это редкий путь.
+  const FORBIDDEN_COMPLEX = [
+    '[contenteditable="true"]',
+    '[contenteditable=""]',
+    '.breadcrumb a strong',
+    '.file-info a',
+    '[aria-label="file name"]',
+    '.opened-by',
+    '.author',
+    '.css-truncate-target.branch',
   ].join(',');
 
-  // Атрибут-маркер: мы можем явно пометить любой узел/поддерево
-  // атрибутом data-ghru-skip="1" и не трогать его
   const SKIP_ATTR = 'data-ghru-skip';
 
-  // Маркер уже переведённого узла (чтобы не зацикливаться)
-  const DONE_ATTR = 'data-ghru-done';
+  // Per-element кеш: true = forbidden, false = safe.
+  // Очищается только когда элемент удаляется из DOM (WeakMap).
+  const ancestorCache = new WeakMap();
+
+  function isElementForbidden(el) {
+    if (!el || el.nodeType !== Node.ELEMENT_NODE) return false;
+    if (FORBIDDEN_TAGS.has(el.tagName)) return true;
+    if (el.hasAttribute && el.hasAttribute(SKIP_ATTR)) return true;
+
+    // classList (быстро)
+    if (el.classList && el.classList.length) {
+      for (const cls of el.classList) {
+        if (FORBIDDEN_CLASS_TOKENS.has(cls)) return true;
+        for (const pref of FORBIDDEN_CLASS_PREFIXES) {
+          if (cls.startsWith(pref)) return true;
+        }
+      }
+    }
+
+    // data-* (быстро, без matches)
+    const ds = el.dataset;
+    if (ds) {
+      for (const [key, values] of FORBIDDEN_DATA) {
+        const v = ds[key];
+        if (v && values.has(v)) return true;
+      }
+    }
+
+    // Сложные селекторы (последняя попытка)
+    try {
+      if (el.matches && el.matches(FORBIDDEN_COMPLEX)) return true;
+    } catch (_) {}
+
+    return false;
+  }
 
   function hasForbiddenAncestor(node) {
     let el = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
-    let depth = 0;
-    while (el && depth < 25) {
-      if (FORBIDDEN_TAGS.has(el.tagName)) return true;
-      if (el.hasAttribute && el.hasAttribute(SKIP_ATTR)) return true;
-      // matches() может бросать на отсоединённых узлах — оборачиваем
-      try {
-        if (el.matches && el.matches(FORBIDDEN_SELECTOR)) return true;
-      } catch (_) {}
+    // Собираем путь до первого кешированного значения или до корня
+    const path = [];
+    while (el && path.length < 40) {
+      const cached = ancestorCache.get(el);
+      if (cached === true) {
+        // Все собранные элементы — тоже forbidden
+        for (const p of path) ancestorCache.set(p, true);
+        return true;
+      }
+      if (cached === false) {
+        // Все собранные — safe
+        for (const p of path) ancestorCache.set(p, false);
+        return false;
+      }
+      if (isElementForbidden(el)) {
+        ancestorCache.set(el, true);
+        for (const p of path) ancestorCache.set(p, true);
+        return true;
+      }
+      path.push(el);
       el = el.parentElement;
-      depth++;
     }
+    // Дошли до корня — всё safe
+    for (const p of path) ancestorCache.set(p, false);
     return false;
   }
 
@@ -83,24 +129,24 @@
     if (!node || node.nodeType !== Node.TEXT_NODE) return false;
     const text = node.nodeValue;
     if (!text) return false;
-    // Только пробелы / пустота — пропускаем
     if (!text.trim()) return false;
-    // Похоже на чистый идентификатор / SHA / число
     const trimmed = text.trim();
-    if (/^[0-9a-f]{7,40}$/i.test(trimmed)) return false; // SHA
-    if (/^[#@][\w./-]+$/.test(trimmed)) return false;     // #1234, @user
-    if (/^https?:\/\//i.test(trimmed)) return false;      // URL
+    if (trimmed.length < 2) return false;
+    // Быстрый выход по первому символу для частых шумов
+    const c = trimmed.charCodeAt(0);
+    if (c === 35 /*#*/ || c === 64 /*@*/) {
+      if (/^[#@][\w./-]+$/.test(trimmed)) return false;
+    }
+    if (/^[0-9a-f]{7,40}$/i.test(trimmed)) return false;
+    if (c === 104 /*h*/ && /^https?:\/\//i.test(trimmed)) return false;
     if (/^[\w.-]+\.(js|ts|tsx|jsx|py|rb|go|rs|md|yml|yaml|json|toml|html|css|sh|java|kt|c|h|cpp|hpp|cs|php|swift|lock)$/i.test(trimmed)) return false;
     if (hasForbiddenAncestor(node)) return false;
     return true;
   }
 
-  // Можно ли переводить указанный атрибут на конкретном элементе?
-  // (translateAttribute проверяет: атрибут видим пользователю, элемент — UI)
   function isTranslatableAttribute(el, attrName) {
     if (!el || el.nodeType !== Node.ELEMENT_NODE) return false;
     if (hasForbiddenAncestor(el)) return false;
-    // value переводим только у submit-кнопок
     if (attrName === 'value') {
       if (el.tagName !== 'INPUT') return false;
       const t = (el.getAttribute('type') || '').toLowerCase();
@@ -109,12 +155,19 @@
     return true;
   }
 
+  function invalidateAncestorCache() {
+    // Вызывать нельзя (WeakMap не поддерживает clear), но можем переназначить
+    // Вызывается из translator при смене уровня перевода/переинициализации.
+  }
+
   root.GitHubRu = root.GitHubRu || {};
   root.GitHubRu.guard = {
     isTranslatableTextNode,
     isTranslatableAttribute,
     hasForbiddenAncestor,
+    isElementForbidden,
+    FORBIDDEN_TAGS,
     SKIP_ATTR,
-    DONE_ATTR,
+    invalidateAncestorCache,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

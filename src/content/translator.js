@@ -1,24 +1,38 @@
-// content/translator.js — движок перевода.
-// Главные принципы:
-//  • Все наши правки DOM выполняются при отключённом MutationObserver
-//    (pause/resume). Это единственный надёжный способ избежать
-//    бесконечного цикла "перевели → observer сработал → перевели снова".
-//  • Один узел переводится не чаще одного раза до инвалидации.
-//  • Максимум полезной работы — в idle/rAF, без блокировки main thread.
+// content/translator.js — движок перевода (оптимизированная версия).
+//
+// Ключевые идеи:
+//  • Мутации пакуются в pending и flush'атся одним проходом (throttle через
+//    microtask + rAF fallback). 200 мутаций подряд = 1 walk, а не 200.
+//  • Walker сам reject'ит поддеревья forbidden-тегов (SVG, CODE, PRE, …),
+//    вместо того чтобы заходить внутрь и проверять hasForbiddenAncestor
+//    на каждом узле.
+//  • pendingRoots дедуплицируются: если в очереди есть и родитель, и
+//    потомок — оставляем только родителя.
+//  • Отметки "переведено" хранятся в WeakMap/WeakSet, не в DOM. Это
+//    экономит setAttribute/attributes-mutations.
+//  • Observer слушает attribute-мутации только на aria-label и title
+//    (реально переводимые), не на всём списке.
 
 (function (root) {
   const ns = root.GitHubRu;
   const { guard, translateTime, buildIndex } = ns;
-  const { isTranslatableTextNode, isTranslatableAttribute, hasForbiddenAncestor, DONE_ATTR } = guard;
+  const {
+    isTranslatableTextNode,
+    isTranslatableAttribute,
+    hasForbiddenAncestor,
+    FORBIDDEN_TAGS,
+  } = guard;
 
   const TRANSLATABLE_ATTRS = ['aria-label', 'title', 'placeholder', 'alt', 'value', 'data-confirm'];
+  // Динамически обновляемые атрибуты, за которыми ИМЕЕТ смысл следить в рантайме.
+  const OBSERVED_ATTRS = ['aria-label', 'title'];
 
   const OBSERVER_OPTS = {
     childList: true,
     subtree: true,
     characterData: true,
     attributes: true,
-    attributeFilter: TRANSLATABLE_ATTRS,
+    attributeFilter: OBSERVED_ATTRS,
   };
 
   const state = {
@@ -28,11 +42,12 @@
     userExceptions: new Set(),
     reportMode: false,
     index: { text: new Map(), attrs: {} },
-    processed: new WeakSet(), // текстовые узлы, уже обработанные
-    originals: new WeakMap(), // node → [original, translated]
+    processed: new WeakSet(),      // обработанные текстовые узлы
+    originals: new WeakMap(),      // node → [original, translated]
+    elementDone: new WeakMap(),    // элемент → Set("attr:value")
     observer: null,
-    rafScheduled: false,
     pendingRoots: new Set(),
+    flushScheduled: false,
   };
 
   // ---------- PAUSE/RESUME observer ----------
@@ -47,7 +62,6 @@
     if (!state.observer) return;
     pauseDepth = Math.max(0, pauseDepth - 1);
     if (pauseDepth === 0) {
-      // Выбрасываем мутации, накопленные во время паузы, — это наши правки
       state.observer.takeRecords();
       state.observer.observe(document.documentElement, OBSERVER_OPTS);
     }
@@ -57,15 +71,15 @@
     try { fn(); } finally { resumeObserver(); }
   }
 
-  // ---------- ПЕРЕВОД ОДНОГО ТЕКСТОВОГО УЗЛА ----------
+  // ---------- lookup / перевод узла ----------
 
   function lookupText(raw) {
-    const leadMatch = raw.match(/^\s+/);
-    const trailMatch = raw.match(/\s+$/);
-    const lead = leadMatch ? leadMatch[0] : '';
-    const trail = trailMatch ? trailMatch[0] : '';
-    const core = raw.slice(lead.length, raw.length - trail.length);
-    if (!core) return null;
+    // Быстрая проверка пробелов без regex
+    let start = 0, end = raw.length;
+    while (start < end && raw.charCodeAt(start) <= 32) start++;
+    while (end > start && raw.charCodeAt(end - 1) <= 32) end--;
+    if (start === end) return null;
+    const core = start === 0 && end === raw.length ? raw : raw.slice(start, end);
 
     if (state.userExceptions.has(core)) return null;
 
@@ -79,12 +93,16 @@
     if (state.showOriginal && translated !== core) {
       translated = `${translated} (${core})`;
     }
-    return lead + translated + trail;
+    if (start === 0 && end === raw.length) return translated;
+    return raw.slice(0, start) + translated + raw.slice(end);
   }
 
   function translateTextNode(node) {
     if (state.processed.has(node)) return;
-    if (!isTranslatableTextNode(node)) return;
+    if (!isTranslatableTextNode(node)) {
+      state.processed.add(node);
+      return;
+    }
     const next = lookupText(node.nodeValue);
     if (next == null) {
       if (state.reportMode) {
@@ -93,108 +111,135 @@
           parent.setAttribute('data-ghru-untranslated', '1');
         }
       }
-      // Отметим как обработанный, чтобы не дёргать его повторно. Если GitHub
-      // изменит текст — characterData mutation очистит отметку (см. observer).
       state.processed.add(node);
       return;
     }
-    if (next === node.nodeValue) {
-      state.processed.add(node);
-      return;
+    if (next !== node.nodeValue) {
+      state.originals.set(node, [node.nodeValue, next]);
+      node.nodeValue = next;
     }
-    state.originals.set(node, [node.nodeValue, next]);
-    node.nodeValue = next;
     state.processed.add(node);
   }
 
-  // ---------- ПЕРЕВОД АТРИБУТОВ ----------
+  // ---------- атрибуты ----------
 
   function translateAttributes(el) {
     if (!el || el.nodeType !== Node.ELEMENT_NODE) return;
     if (hasForbiddenAncestor(el)) return;
 
-    const doneAttrVal = el.getAttribute(DONE_ATTR) || '';
-    const doneSet = new Set(doneAttrVal ? doneAttrVal.split('|') : []);
-    let doneChanged = false;
+    let done = state.elementDone.get(el);
 
-    for (const attr of TRANSLATABLE_ATTRS) {
+    for (let i = 0; i < TRANSLATABLE_ATTRS.length; i++) {
+      const attr = TRANSLATABLE_ATTRS[i];
       if (!el.hasAttribute(attr)) continue;
-      if (!isTranslatableAttribute(el, attr)) continue;
-
       const raw = el.getAttribute(attr);
-      if (!raw || !raw.trim()) continue;
+      if (!raw) continue;
+      // Пустые и пробельные — пропустим без лишних trim
+      if (raw.length < 2 && !raw.trim()) continue;
 
-      const doneKey = `${attr}:${raw}`;
-      if (doneSet.has(doneKey)) continue;
+      const doneKey = attr + '\x01' + raw;
+      if (done && done.has(doneKey)) continue;
 
-      const specific = state.index.attrs[attr];
-      const core = raw.trim();
-      let translated = specific && specific.get(core);
-      if (!translated) translated = state.index.text.get(core);
-      if (!translated) {
-        // Отметим эту пару как рассмотренную (переводить нечего)
-        doneSet.add(doneKey);
-        doneChanged = true;
+      if (!isTranslatableAttribute(el, attr)) {
+        if (!done) { done = new Set(); state.elementDone.set(el, done); }
+        done.add(doneKey);
         continue;
       }
 
-      const leadMatch = raw.match(/^\s+/);
-      const trailMatch = raw.match(/\s+$/);
-      const next = (leadMatch ? leadMatch[0] : '') + translated + (trailMatch ? trailMatch[0] : '');
+      // Trim быстрее через charCodeAt
+      let s = 0, e = raw.length;
+      while (s < e && raw.charCodeAt(s) <= 32) s++;
+      while (e > s && raw.charCodeAt(e - 1) <= 32) e--;
+      const core = s === 0 && e === raw.length ? raw : raw.slice(s, e);
+
+      const specific = state.index.attrs[attr];
+      let translated = specific && specific.get(core);
+      if (!translated) translated = state.index.text.get(core);
+
+      if (!done) { done = new Set(); state.elementDone.set(el, done); }
+
+      if (!translated) {
+        done.add(doneKey);
+        continue;
+      }
+
+      const next = s === 0 && e === raw.length
+        ? translated
+        : raw.slice(0, s) + translated + raw.slice(e);
       if (next !== raw) {
         el.setAttribute(attr, next);
       }
-      doneSet.add(`${attr}:${next}`); // и исходный, и переведённый варианты
-      doneSet.add(doneKey);
-      doneChanged = true;
-    }
-
-    if (doneChanged) {
-      el.setAttribute(DONE_ATTR, Array.from(doneSet).join('|'));
+      done.add(doneKey);
+      done.add(attr + '\x01' + next);
     }
   }
 
-  // ---------- ОБХОД ПОДДЕРЕВА ----------
+  // ---------- обход поддерева ----------
 
-  const WALK_BUDGET = 5000; // максимум узлов за один проход, чтобы не блокировать main thread
+  // Кешируем ссылку на NodeFilter для скорости
+  const FILTER_ACCEPT = NodeFilter.FILTER_ACCEPT;
+  const FILTER_REJECT = NodeFilter.FILTER_REJECT;
+  const SHOW_ELEMENT_TEXT = NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT;
+
+  const acceptNodeFilter = {
+    acceptNode(node) {
+      if (node.nodeType === Node.TEXT_NODE) return FILTER_ACCEPT;
+      // Элемент — reject всего поддерева, если тег запрещён
+      if (FORBIDDEN_TAGS.has(node.tagName)) return FILTER_REJECT;
+      return FILTER_ACCEPT;
+    },
+  };
+
+  const WALK_BUDGET = 4000;
 
   function walkAndTranslate(rootNode) {
-    if (!rootNode) return;
+    if (!rootNode || !rootNode.isConnected) return;
     if (rootNode.nodeType === Node.TEXT_NODE) {
       translateTextNode(rootNode);
       return;
     }
     if (rootNode.nodeType !== Node.ELEMENT_NODE && rootNode.nodeType !== Node.DOCUMENT_NODE) return;
-    if (rootNode.nodeType === Node.ELEMENT_NODE && hasForbiddenAncestor(rootNode)) return;
+    if (rootNode.nodeType === Node.ELEMENT_NODE) {
+      if (FORBIDDEN_TAGS.has(rootNode.tagName)) return;
+      if (hasForbiddenAncestor(rootNode)) return;
+      translateAttributes(rootNode);
+    }
 
-    if (rootNode.nodeType === Node.ELEMENT_NODE) translateAttributes(rootNode);
-
-    const walker = document.createTreeWalker(
-      rootNode,
-      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
-      {
-        acceptNode(node) {
-          if (node.nodeType === Node.TEXT_NODE) return NodeFilter.FILTER_ACCEPT;
-          const tag = node.tagName;
-          if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEMPLATE') {
-            return NodeFilter.FILTER_REJECT;
-          }
-          return NodeFilter.FILTER_ACCEPT;
-        },
-      }
-    );
-
+    const walker = document.createTreeWalker(rootNode, SHOW_ELEMENT_TEXT, acceptNodeFilter);
     let n, count = 0;
     while ((n = walker.nextNode())) {
       if (n.nodeType === Node.TEXT_NODE) translateTextNode(n);
       else translateAttributes(n);
       if (++count >= WALK_BUDGET) {
-        // Не обработали всё — запланируем добивку на следующий idle
         state.pendingRoots.add(rootNode);
         scheduleFlush();
         break;
       }
     }
+  }
+
+  // Убирает из набора вложенные корни — оставляет только самые верхние
+  function dedupeRoots(set) {
+    if (set.size <= 1) return Array.from(set);
+    const arr = Array.from(set);
+    const result = [];
+    for (let i = 0; i < arr.length; i++) {
+      const a = arr[i];
+      if (!a || !a.isConnected) continue;
+      let covered = false;
+      for (let j = 0; j < arr.length; j++) {
+        if (i === j) continue;
+        const b = arr[j];
+        if (!b || !b.isConnected) continue;
+        // a вложен в b?
+        if (b.nodeType === Node.ELEMENT_NODE && a !== b && b.contains(a)) {
+          covered = true;
+          break;
+        }
+      }
+      if (!covered) result.push(a);
+    }
+    return result;
   }
 
   function runAll(targets) {
@@ -206,20 +251,20 @@
     });
   }
 
-  // ---------- ПЛАНИРОВЩИК ----------
+  // ---------- планировщик ----------
 
   function scheduleFlush() {
-    if (state.rafScheduled) return;
-    state.rafScheduled = true;
+    if (state.flushScheduled) return;
+    state.flushScheduled = true;
     const run = () => {
-      state.rafScheduled = false;
+      state.flushScheduled = false;
       if (state.pendingRoots.size === 0) return;
-      const roots = Array.from(state.pendingRoots);
+      const roots = dedupeRoots(state.pendingRoots);
       state.pendingRoots.clear();
-      runAll(roots);
+      if (roots.length) runAll(roots);
     };
     if (typeof requestIdleCallback === 'function') {
-      requestIdleCallback(run, { timeout: 200 });
+      requestIdleCallback(run, { timeout: 300 });
     } else {
       requestAnimationFrame(run);
     }
@@ -230,41 +275,42 @@
     scheduleFlush();
   }
 
-  // ---------- OBSERVER ----------
+  // ---------- observer ----------
 
   function onMutations(mutations) {
     if (!state.enabled) return;
-    // pauseDepth>0 означает, что мутации — наши (не должны сюда попасть, т.к.
-    // disconnect отменяет подписку, но takeRecords на всякий случай).
     if (pauseDepth > 0) return;
 
-    for (const m of mutations) {
-      if (m.type === 'childList') {
-        for (const added of m.addedNodes) {
-          if (added.nodeType === Node.ELEMENT_NODE || added.nodeType === Node.TEXT_NODE) {
-            enqueue(added);
+    for (let i = 0; i < mutations.length; i++) {
+      const m = mutations[i];
+      const type = m.type;
+      if (type === 'childList') {
+        const added = m.addedNodes;
+        for (let j = 0; j < added.length; j++) {
+          const node = added[j];
+          const nt = node.nodeType;
+          if (nt === Node.ELEMENT_NODE) {
+            if (!FORBIDDEN_TAGS.has(node.tagName)) state.pendingRoots.add(node);
+          } else if (nt === Node.TEXT_NODE) {
+            state.pendingRoots.add(node);
           }
         }
-      } else if (m.type === 'characterData') {
-        // Текст изменился — инвалидация кеша processed
+      } else if (type === 'characterData') {
         state.processed.delete(m.target);
-        enqueue(m.target);
-      } else if (m.type === 'attributes') {
-        // GitHub мог переписать tooltip. Сбросим только запись в DONE_ATTR
-        // для этого атрибута (не трогая остальные) и поставим элемент в очередь.
+        state.pendingRoots.add(m.target);
+      } else if (type === 'attributes') {
         const el = m.target;
         if (!el || el.nodeType !== Node.ELEMENT_NODE) continue;
-        const done = (el.getAttribute(DONE_ATTR) || '').split('|').filter(Boolean);
-        const filtered = done.filter(k => !k.startsWith(m.attributeName + ':'));
-        if (filtered.length !== done.length) {
-          withObserverPaused(() => {
-            if (filtered.length) el.setAttribute(DONE_ATTR, filtered.join('|'));
-            else el.removeAttribute(DONE_ATTR);
-          });
+        // Сбросим запись для конкретного атрибута в elementDone
+        const done = state.elementDone.get(el);
+        if (done) {
+          const prefix = m.attributeName + '\x01';
+          for (const k of done) if (k.startsWith(prefix)) done.delete(k);
         }
-        enqueue(el);
+        state.pendingRoots.add(el);
       }
     }
+    if (state.pendingRoots.size) scheduleFlush();
   }
 
   function startObserver() {
@@ -279,7 +325,7 @@
     }
   }
 
-  // ---------- УПРАВЛЕНИЕ ----------
+  // ---------- управление ----------
 
   function setIndex(level) {
     state.level = level || 'full';
@@ -300,6 +346,7 @@
       }
     });
     state.processed = new WeakSet();
+    state.elementDone = new WeakMap();
   }
 
   function enable() {
@@ -319,8 +366,8 @@
     let needsRebuild = false;
     if (settings.level && settings.level !== state.level) needsRebuild = true;
     if (typeof settings.showOriginal === 'boolean') {
+      if (settings.showOriginal !== state.showOriginal) needsRebuild = true;
       state.showOriginal = settings.showOriginal;
-      needsRebuild = true;
     }
     if (Array.isArray(settings.userExceptions)) {
       state.userExceptions = new Set(settings.userExceptions);
@@ -329,6 +376,7 @@
     if (needsRebuild) {
       setIndex(settings.level || state.level);
       state.processed = new WeakSet();
+      state.elementDone = new WeakMap();
       applyAll();
     }
     if (typeof settings.enabled === 'boolean') {

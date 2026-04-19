@@ -39,6 +39,7 @@
         "src/dictionary/profile.js",
         "src/dictionary/notifications.js",
         "src/dictionary/time.js",
+        "src/dictionary/user-extras.js",
         "src/dictionary/index.js",
         "src/content/guard.js",
         "src/content/translator.js",

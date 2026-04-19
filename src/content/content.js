@@ -14,12 +14,9 @@
     reportMode: false,
   };
 
-  // Pre-hide: добавляем класс сразу, чтобы до первого перевода body был скрыт.
-  // Сделано в prehide.css. Здесь только снимаем, когда готовы.
+  // Pre-hide: скрыли body через prehide.css, снимем класс после первого перевода
   document.documentElement.classList.add('ghru-prehide');
 
-  // Безопасность: снимем pre-hide не позже чем через 1500мс в любом случае,
-  // чтобы не «застрять» при неполадках.
   const fallbackUnhide = setTimeout(() => {
     document.documentElement.classList.remove('ghru-prehide');
   }, 1500);
@@ -48,7 +45,6 @@
   }
 
   function onDomReady() {
-    // Первичный проход — как только DOM доступен
     if (translator.state.enabled) {
       translator.applyAll();
     }
@@ -56,26 +52,28 @@
     clearTimeout(fallbackUnhide);
   }
 
-  // SPA-навигация GitHub (Turbo). MutationObserver сам отлавливает добавления,
-  // но Turbo при render заменяет большие куски DOM — после этого имеет смысл
-  // явно прогнать новый <main>. Делаем это с throttle, чтобы не дублировать.
-  let reapplyScheduled = false;
+  // SPA-переходы GitHub. Наблюдаем только за самыми "финальными" событиями,
+  // чтобы не запускать applyAll по пять раз за навигацию. MutationObserver
+  // и так подхватит все добавления — turbo-события нужны только для
+  // финальной подчистки после массовой замены DOM.
+  //
+  // turbo:load    — полный переход по странице (после completion)
+  // turbo:frame-load — загрузка <turbo-frame>
+  // pjax:end      — legacy pjax
+  let reapplyTimer = null;
   const reapply = () => {
     if (!translator.state.enabled) return;
-    if (reapplyScheduled) return;
-    reapplyScheduled = true;
-    setTimeout(() => {
-      reapplyScheduled = false;
+    if (reapplyTimer) return;
+    reapplyTimer = setTimeout(() => {
+      reapplyTimer = null;
       translator.applyAll();
-    }, 50);
+    }, 100);
   };
   document.addEventListener('turbo:load', reapply);
-  document.addEventListener('turbo:render', reapply);
   document.addEventListener('turbo:frame-load', reapply);
   document.addEventListener('pjax:end', reapply);
-  document.addEventListener('soft-nav:end', reapply);
 
-  // Реакция на смену настроек в storage
+  // Реакция на смену настроек
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'sync') return;
     const patch = {};
@@ -85,7 +83,6 @@
     translator.setSettings(patch);
   });
 
-  // Приём сообщений из popup / background
   chrome.runtime.onMessage.addListener((msg) => {
     if (!msg) return;
     if (msg.type === 'REAPPLY') reapply();
@@ -96,7 +93,6 @@
     }
   });
 
-  // Инициализация
   loadSettings().then(settings => {
     applyInitial(settings);
     if (document.readyState === 'loading') {
