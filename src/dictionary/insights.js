@@ -221,6 +221,8 @@
         'file': 'файл',
         'have changed and there have been': 'изменено, всего',
         'has changed and there has been': 'изменено, всего',
+        'changed and there have been': 'изменено, всего',
+        'changed and there has been': 'изменено, всего',
         'additions and': 'добавлений и',
         'addition and': 'добавление и',
         'additions': 'добавлений',

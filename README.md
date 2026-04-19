@@ -20,6 +20,16 @@ Manifest V3 в Firefox имеет нюансы. Для разработки:
 1. Откройте `about:debugging#/runtime/this-firefox`.
 2. Нажмите «Загрузить временное дополнение…» и выберите `manifest.json`.
 
+## Как это выглядит
+
+Главная страница репозитория, настройки и Insights — всё на русском:
+
+![Страница репозитория](docs/screenshots/repo-overview.png)
+
+![Настройки репозитория](docs/screenshots/repo-settings.png)
+
+![Insights → Pulse](docs/screenshots/insights-pulse.png)
+
 ## Что переводится
 
 - Навигация (шапка, меню, dashboard).
