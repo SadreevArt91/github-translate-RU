@@ -1,0 +1,5 @@
+/* prehide.css — до первого прогона прячем body, чтобы не было "мигания" английского.
+   content.js снимает класс сразу после первичного перевода. */
+html.ghru-prehide body {
+  visibility: hidden !important;
+}

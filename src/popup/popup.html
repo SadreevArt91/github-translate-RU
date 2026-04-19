@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>GitHub на русском</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1>GitHub на русском</h1>
+  </header>
+
+  <section class="row">
+    <label class="switch">
+      <input type="checkbox" id="enabled" />
+      <span>Перевод включён</span>
+    </label>
+  </section>
+
+  <section>
+    <label for="level">Уровень перевода</label>
+    <select id="level">
+      <option value="minimal">Минимальный (только навигация)</option>
+      <option value="standard">Стандартный</option>
+      <option value="full">Полный</option>
+    </select>
+  </section>
+
+  <section class="row">
+    <label class="switch">
+      <input type="checkbox" id="showOriginal" />
+      <span>Показывать оригинал в скобках</span>
+    </label>
+  </section>
+
+  <section class="row">
+    <label class="switch">
+      <input type="checkbox" id="reportMode" />
+      <span>Подсвечивать непереведённое</span>
+    </label>
+  </section>
+
+  <footer>
+    <button id="openOptions" class="link">Все настройки</button>
+    <span class="hotkey">Alt+Shift+L — toggle</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

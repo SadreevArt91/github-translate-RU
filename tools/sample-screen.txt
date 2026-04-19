@@ -1,0 +1,59 @@
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+
+General
+Access
+Collaborators
+Moderation options
+Code and automation
+Branches
+Tags
+Rules
+Actions
+Models
+Webhooks
+Copilot
+Environments
+Codespaces
+Pages
+Security and quality
+Advanced Security
+Deploy keys
+Secrets and variables
+Integrations
+GitHub Apps
+Email notifications
+
+General
+Repository name
+kate-rup
+Rename
+Template repository
+Template repositories let users generate new repositories with the same directory structure and files.
+Learn more about template repositories
+Default branch
+The default branch is considered the "base" branch in your repository, against which all pull requests and code commits are automatically made, unless you specify a different branch.
+master
+Releases
+Enable release immutability
+Disallow assets and tags from being modified once a release is published.
+Social preview
+Upload an image to customize your repository's social media preview.
+Images should be at least 640×320px (1280×640px for best display).
+Download template
+Edit
+Features
+Wikis
+Wikis host documentation for your repository.
+Restrict editing to collaborators only
+Public wikis will still be readable by everyone.
+Issues
+Issues integrate lightweight task tracking into your repository. Keep projects on track with issue labels and milestones, and reference them in commit messages.
+Preview

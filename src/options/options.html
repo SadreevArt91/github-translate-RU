@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>GitHub на русском — настройки</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>GitHub на русском</h1>
+      <p class="muted">Аккуратный перевод интерфейса. Код и пользовательский контент не переводятся.</p>
+    </header>
+
+    <section>
+      <h2>Основные</h2>
+
+      <label class="field">
+        <input type="checkbox" id="enabled" />
+        <span>Включить перевод</span>
+      </label>
+
+      <label class="field">
+        <span>Уровень перевода</span>
+        <select id="level">
+          <option value="minimal">Минимальный — только навигация и общие кнопки</option>
+          <option value="standard">Стандартный — репозитории, задачи, пул-реквесты</option>
+          <option value="full">Полный — включая Actions и настройки</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <input type="checkbox" id="showOriginal" />
+        <span>Показывать оригинал в скобках — полезно, пока привыкаете к переводу</span>
+      </label>
+
+      <label class="field">
+        <input type="checkbox" id="reportMode" />
+        <span>Режим отчёта: подсвечивать непереведённые строки (<code>[data-ghru-untranslated]</code>)</span>
+      </label>
+    </section>
+
+    <section>
+      <h2>Исключения</h2>
+      <p class="muted">Одна строка — одно исключение. Эти тексты не будут переводиться, даже если есть в словаре.</p>
+      <textarea id="userExceptions" rows="6" placeholder="Например: Draft"></textarea>
+    </section>
+
+    <section>
+      <h2>Горячая клавиша</h2>
+      <p class="muted">Переключение перевода: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd></p>
+      <p class="muted">Изменить можно в <a href="#" id="openShortcuts">chrome://extensions/shortcuts</a>.</p>
+    </section>
+
+    <section>
+      <h2>Обратная связь</h2>
+      <p class="muted">
+        Нашли неточность или непереведённую строку? Откройте issue в репозитории
+        проекта — приложите URL страницы и фрагмент текста.
+      </p>
+    </section>
+
+    <footer>
+      <button id="save" class="primary">Сохранить</button>
+      <span id="status" class="muted" aria-live="polite"></span>
+    </footer>
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>
