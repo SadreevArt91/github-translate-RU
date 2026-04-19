@@ -6,10 +6,6 @@
     'Compare & pull request': 'Сравнить и создать пул-реквест',
 
     // Статусы
-    'Open': 'Открыт',
-    'Closed': 'Закрыт',
-    'Merged': 'Слит',
-    'Draft': 'Черновик',
     'Ready for review': 'Готов к ревью',
     'Mark as draft': 'Сделать черновиком',
     'Convert to draft': 'Перевести в черновик',
@@ -96,7 +92,6 @@
     'Cancelled': 'Отменено',
     'Show all checks': 'Показать все проверки',
     'Hide all checks': 'Скрыть проверки',
-    'Details': 'Подробнее',
     'Re-run jobs': 'Перезапустить задания',
     'Re-run all jobs': 'Перезапустить все задания',
     'Re-run failed jobs': 'Перезапустить неуспешные задания',
@@ -132,6 +127,21 @@
     },
   };
 
+
+  // Контекстные правила: статусы PR/Issue внутри label .State побеждают
+  // общий словарь (где "Open"="Открыть", "Closed"="Закрыт" и т.п.)
+  const contextual = [
+    {
+      selector: '.State, [data-testid="issue-state"], [data-testid="pull-request-state"], [data-testid="state-indicator"], .IssueLabel',
+      strings: {
+        'Open': 'Открыт',
+        'Closed': 'Закрыт',
+        'Merged': 'Слит',
+        'Draft': 'Черновик',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.pr = { strings, attributes };
+  root.GitHubRu.dict.pr = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

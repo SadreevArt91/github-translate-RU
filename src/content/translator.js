@@ -73,7 +73,26 @@
 
   // ---------- lookup / перевод узла ----------
 
-  function lookupText(raw) {
+  function lookupContextual(core, parentEl) {
+    const ctxKeys = state.index.contextualKeys;
+    if (!ctxKeys || !parentEl || typeof parentEl.closest !== 'function') return null;
+    const indices = ctxKeys.get(core);
+    if (!indices) return null;
+    const rules = state.index.contextual;
+    for (let i = 0; i < indices.length; i++) {
+      const rule = rules[indices[i]];
+      if (!rule) continue;
+      try {
+        if (parentEl.closest(rule.selector)) {
+          const t = rule.strings.get(core);
+          if (t) return t;
+        }
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  function lookupText(raw, parentEl) {
     // Быстрая проверка пробелов без regex
     let start = 0, end = raw.length;
     while (start < end && raw.charCodeAt(start) <= 32) start++;
@@ -83,7 +102,11 @@
 
     if (state.userExceptions.has(core)) return null;
 
-    let translated = state.index.text.get(core);
+    // 1) Контекстные правила (селектор-зависимые) - побеждают глобальный словарь
+    let translated = lookupContextual(core, parentEl);
+    // 2) Глобальный плоский словарь
+    if (!translated) translated = state.index.text.get(core);
+    // 3) Время (relative time и т.п.)
     if (!translated) {
       const t = translateTime && translateTime(core);
       if (t) translated = t;
@@ -103,7 +126,7 @@
       state.processed.add(node);
       return;
     }
-    const next = lookupText(node.nodeValue);
+    const next = lookupText(node.nodeValue, node.parentElement);
     if (next == null) {
       if (state.reportMode) {
         const parent = node.parentElement;

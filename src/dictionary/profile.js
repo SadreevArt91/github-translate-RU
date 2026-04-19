@@ -5,7 +5,6 @@
     'Repositories': 'Репозитории',
     'Projects': 'Проекты',
     'Packages': 'Packages',
-    'Stars': 'Избранное',
     'Followers': 'Подписчики',
     'Following': 'Подписки',
     'Follow': 'Подписаться',
@@ -22,7 +21,6 @@
     'contribution in the last year': 'вклад за последний год',
     'contributions in the last year': 'вкладов за последний год',
     'Less': 'Меньше',
-    'More': 'Больше',
     'Learn how we count contributions': 'Как мы считаем вклады',
     'No activity in': 'Нет активности',
     'Contribution settings': 'Настройки активности',
@@ -83,6 +81,17 @@
 
   const attributes = {};
 
+
+  // Таб "Stars" на странице профиля = "Избранное" (а не "Звёзды" из repo.js)
+  const contextual = [
+    {
+      selector: 'nav.UnderlineNav a[href*="tab=stars"], a[data-tab-item="stars"], [data-tab="stars"]',
+      strings: {
+        'Stars': 'Избранное',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.profile = { strings, attributes };
+  root.GitHubRu.dict.profile = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

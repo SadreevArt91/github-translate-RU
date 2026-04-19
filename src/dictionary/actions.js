@@ -37,7 +37,6 @@
     'Exit fullscreen': 'Выйти из полноэкранного режима',
 
     // Статусы
-    'Success': 'Успешно',
     'Failure': 'Ошибка',
     'Cancelled': 'Отменено',
     'Skipped': 'Пропущено',
@@ -78,6 +77,18 @@
     },
   };
 
+
+  // Статус CI-запуска: "Success"/"Failure"/etc внутри бейджа workflow run
+  // перевод "Success"="Успешно" (общий из common.js — "Готово")
+  const contextual = [
+    {
+      selector: '.State, [data-testid="workflow-run-status"], [data-testid="status-indicator"], .octicon-check-circle-fill, .color-fg-success, svg[data-status]',
+      strings: {
+        'Success': 'Успешно',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.actions = { strings, attributes };
+  root.GitHubRu.dict.actions = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

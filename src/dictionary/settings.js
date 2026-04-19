@@ -67,7 +67,6 @@
     'Participating': 'В обсуждениях, в которых участвую',
     'Watching': 'За чем слежу',
     'Push notifications': 'Push-уведомления',
-    'Email': 'По email',
     'Web': 'В интерфейсе',
     'Mobile': 'Мобильные',
 
@@ -214,7 +213,6 @@
     'GitHub Pages': 'GitHub Pages',
     'Your GitHub Pages site is currently being built from the':
       'Ваш сайт GitHub Pages сейчас собирается из ветки',
-    'Source': 'Источник',
     'Build and deployment': 'Сборка и деплой',
     'Custom domain': 'Свой домен',
     'Enforce HTTPS': 'Требовать HTTPS',
@@ -232,6 +230,24 @@
 
   const attributes = {};
 
+
+  // "Source" в настройках GitHub Pages = "Источник" (в repo.js "Source" = "Исходник" — вкладка)
+  // "Email" в канале уведомлений = "По email" (в common.js "Email" = "Электронная почта" — label)
+  const contextual = [
+    {
+      selector: '#pages-form, .settings-next form, [data-target*="pages"]',
+      strings: {
+        'Source': 'Источник',
+      },
+    },
+    {
+      selector: '.notifications-list, [data-testid="notification-channels"], .js-notifications-email',
+      strings: {
+        'Email': 'По email',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.settings = { strings, attributes };
+  root.GitHubRu.dict.settings = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

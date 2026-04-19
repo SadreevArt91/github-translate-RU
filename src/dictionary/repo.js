@@ -26,7 +26,6 @@
     'Use this template': 'Использовать как шаблон',
 
     // Заголовки разделов
-    'About': 'О репозитории',
     'No description, website, or topics provided.': 'Описание, сайт и темы не указаны.',
     'No description provided.': 'Описание не указано.',
     'Topics': 'Темы',
@@ -143,6 +142,17 @@
     },
   };
 
+
+  // "About" в сайдбаре репозитория = "О репозитории" (а не "О нас" из nav.js)
+  const contextual = [
+    {
+      selector: '.BorderGrid-cell h2, .Layout-sidebar h2, .repository-content .BorderGrid h2',
+      strings: {
+        'About': 'О репозитории',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.repo = { strings, attributes };
+  root.GitHubRu.dict.repo = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

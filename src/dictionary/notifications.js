@@ -3,7 +3,6 @@
   const strings = {
     'Inbox': 'Входящие',
     'Saved': 'Сохранённые',
-    'Done': 'Выполненные',
     'Mark as read': 'Отметить прочитанным',
     'Mark as unread': 'Отметить непрочитанным',
     'Mark as done': 'Отметить выполненным',
@@ -43,6 +42,17 @@
 
   const attributes = {};
 
+
+  // "Done" в списке уведомлений/фильтрах = "Выполнено" (а не "Готово")
+  const contextual = [
+    {
+      selector: '.js-notifications-list, .notifications-list, [data-testid="notifications-list"], a[href*="query=is%3Adone"], a[href*="query=is:done"]',
+      strings: {
+        'Done': 'Выполнено',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.notifications = { strings, attributes };
+  root.GitHubRu.dict.notifications = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);

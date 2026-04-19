@@ -7,8 +7,6 @@
     'Submit issue': 'Отправить задачу',
 
     // Статусы
-    'Open': 'Открытые',
-    'Closed': 'Закрытые',
     'Close issue': 'Закрыть задачу',
     'Close as completed': 'Закрыть как выполненную',
     'Close as not planned': 'Закрыть как не будет сделана',
@@ -87,6 +85,18 @@
     },
   };
 
+
+  // Фильтры списка задач: кнопки-ссылки с href is:open / is:closed
+  const contextual = [
+    {
+      selector: '.table-list-header-toggle, .issues-listing, .Subnav-search-context, a[href*="is%3Aopen"], a[href*="is%3Aclosed"], a[href*="is:open"], a[href*="is:closed"]',
+      strings: {
+        'Open': 'Открытые',
+        'Closed': 'Закрытые',
+      },
+    },
+  ];
+
   root.GitHubRu.dict = root.GitHubRu.dict || {};
-  root.GitHubRu.dict.issues = { strings, attributes };
+  root.GitHubRu.dict.issues = { strings, attributes, contextual };
 })(typeof window !== 'undefined' ? window : globalThis);
