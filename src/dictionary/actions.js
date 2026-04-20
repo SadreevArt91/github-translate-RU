@@ -68,6 +68,31 @@
     'Deployment': 'Деплой',
     'Automation': 'Автоматизация',
     'Continuous integration': 'Непрерывная интеграция',
+<<<<<<< HEAD
+    // Доп. блоки на /actions/new
+    'Suggested for this repository': 'Рекомендовано для этого репозитория',
+    'Browse all categories': 'Все категории',
+    // Полная склейка двух предложений (на случай если GitHub склеивает текстовые узлы)
+    'Build, test, and deploy your code. Make code reviews, branch management, and issue triaging work the way you want.':
+      'Собирайте, тестируйте и деплойте код. Делайте код-ревью, управляйте ветками и задачами так, как вам удобно.',
+
+    // Подвал «Learn more about GitHub Actions»
+    'Learn more about GitHub Actions': 'Подробнее о GitHub Actions',
+    'Getting started and core concepts': 'Начало работы и базовые концепции',
+    'New to Actions? Start here. Learn the core concepts and how to get started.':
+      'Только начинаете работать с Actions? Начните здесь — освоите базовые концепции и первые шаги.',
+    'Configuring and managing workflows': 'Настройка и управление workflow',
+    'Create custom workflows to control your project\u2019s life cycle processes.':
+      'Создавайте свои workflow, чтобы управлять жизненным циклом проекта.',
+    'Create custom workflows to control your project\'s life cycle processes.':
+      'Создавайте свои workflow, чтобы управлять жизненным циклом проекта.',
+    'Language and framework guides': 'Руководства по языкам и фреймворкам',
+    'Guides for projects written in many programming languages.':
+      'Руководства для проектов, написанных на разных языках программирования.',
+
+    // Метки в карточках (категория)
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
   };
 
   const attributes = {

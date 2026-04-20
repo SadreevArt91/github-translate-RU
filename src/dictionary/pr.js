@@ -30,6 +30,17 @@
     // Сайдбар
     'Reviewers': 'Рецензенты',
     'No reviews': 'Нет ревью',
+<<<<<<< HEAD
+    // Dropdown «Filter by reviews» на /pulls
+    'Reviews': 'Ревью',
+    'Filter by reviews': 'Фильтр по ревью',
+    'Review required': 'Требуется ревью',
+    'Approved review': 'Ревью одобрено',
+    'Reviewed by you': 'Вы провели ревью',
+    'Not reviewed by you': 'Вы не проводили ревью',
+    'Awaiting review from you': 'Ожидают вашего ревью',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Assignees': 'Исполнители',
     'No one assigned': 'Никто не назначен',
     'Assign yourself': 'Назначить себя',
@@ -121,6 +132,51 @@
       'Пул-реквесты помогают совместно работать над кодом. Когда они будут созданы, они появятся здесь в виде списка с поиском и фильтрами. Чтобы начать, вам нужно',
     'create a pull request': 'создать пул-реквест',
 
+<<<<<<< HEAD
+    // /compare — страница сравнения и точка входа в PR
+    'Compare changes across branches, commits, tags, and more below. If you need to, you can also':
+      'Сравнивайте ветки, коммиты, теги и не только. При необходимости вы также можете',
+    'compare across forks': 'сравнивать между форками',
+    'Compare changes across branches, commits, tags, and more below. If you need to, you can also compare across forks.':
+      'Сравнивайте ветки, коммиты, теги и не только. При необходимости вы также можете сравнивать между форками.',
+    'base:': 'база:',
+    'compare:': 'сравнить:',
+    'base repository:': 'Базовый репозиторий:',
+    'head repository:': 'Репозиторий head:',
+    'Choose a base ref': 'Выбрать базовую ссылку',
+    'Choose a head ref': 'Выбрать ссылку для сравнения',
+    'Failed to load repositories. Confirm that selected base ref is valid, then try again.':
+      'Не удалось загрузить репозитории. Убедитесь, что выбранная базовая ссылка корректна, и повторите попытку.',
+    'Failed to load repositories. Confirm that selected head ref is valid, then try again.':
+      'Не удалось загрузить репозитории. Убедитесь, что выбранная head-ссылка корректна, и повторите попытку.',
+    'Choose different branches or forks above to discuss and review changes.':
+      'Выберите разные ветки или форки выше, чтобы обсудить и проверить изменения.',
+    'Learn about pull requests': 'Узнать о пул-реквестах',
+    'Compare and review just about anything': 'Сравнивайте и проверяйте что угодно',
+    'Branches, tags, commit ranges, and time ranges. In the same repository and across forks.':
+      'Ветки, теги, диапазоны коммитов и промежутки времени. В одном репозитории и между форками.',
+    'Example comparisons': 'Примеры сравнений',
+    // /compare — состояния для заполненного сравнения (задел на будущее)
+    'Able to merge': 'Можно объединить',
+    'These branches can be automatically merged.': 'Эти ветки можно объединить автоматически.',
+    'Can’t automatically merge': 'Нельзя объединить автоматически',
+    'Can\u2019t automatically merge': 'Нельзя объединить автоматически',
+    'Can\'t automatically merge': 'Нельзя объединить автоматически',
+    'Don’t worry, you can still create the pull request.':
+      'Не переживайте, вы всё равно можете создать пул-реквест.',
+    'Don\'t worry, you can still create the pull request.':
+      'Не переживайте, вы всё равно можете создать пул-реквест.',
+    'There isn’t anything to compare.': 'Нечего сравнивать.',
+    'There isn\'t anything to compare.': 'Нечего сравнивать.',
+    'Nothing to compare.': 'Нечего сравнивать.',
+    'Choose different branches': 'Выберите другие ветки',
+    'Switch base': 'Поменять базу',
+    'Commit comparison': 'Сравнение коммитов',
+    'Discuss and review the changes in this comparison with others.':
+      'Обсуждайте и просматривайте изменения в этом сравнении с другими.',
+
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     // Баннер «Label issues and pull requests for new contributors»
     'Label issues and pull requests for new contributors':
       'Отмечайте задачи и пул-реквесты для новых контрибьюторов',
@@ -133,6 +189,23 @@
     // ProTip
     'ProTip!': 'Совет!',
     'Exclude everything labeled': 'Исключить всё помеченное меткой',
+<<<<<<< HEAD
+
+    // === Пустое состояние /issues и /pulls (список фрагментирован на текстовые узлы) ===
+    'You could search': 'Можно поискать',
+    'all of GitHub': 'по всему GitHub',
+    'or try an': 'или попробуйте',
+    'advanced search': 'расширенный поиск',
+    'advanced search.': 'расширенный поиск.',
+    'will show everything without a milestone.': 'покажет всё без вехи.',
+    'will show everything with no assignee.': 'покажет всё без исполнителя.',
+    'will show everything without a label.': 'покажет всё без меток.',
+    // Варианты ProTip-подсказок
+    'no:milestone': 'no:milestone',       // ключевое слово поиска — не переводим
+    'no:assignee': 'no:assignee',
+    'no:label': 'no:label',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
   };
 
   const attributes = {

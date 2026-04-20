@@ -13,6 +13,20 @@
     'Releases': 'Релизы',
     'Tags': 'Теги',
     'Branches': 'Ветки',
+<<<<<<< HEAD
+    // /branches — страница веток
+    'New branch': 'Новая ветка',
+    'Yours': 'Ваши',
+    'Stale': 'Устаревшие',
+    'Check status': 'Статус проверок',
+    'Behind': 'Отстаёт',
+    'Ahead': 'Впереди',
+    'Action menu': 'Меню действий',
+    'Copy branch name to clipboard': 'Скопировать имя ветки в буфер обмена',
+    'Default': 'По умолчанию',
+
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 
     // Действия с репо
     'Watch': 'Отслеживать',
@@ -122,6 +136,30 @@
     'Create a new release': 'Создать новый релиз',
     'Edit release': 'Изменить релиз',
     'Release notes': 'Заметки о релизе',
+<<<<<<< HEAD
+    'Draft a new release': 'Подготовить новый релиз',
+    'Delete tag': 'Удалить тег',
+    'Delete this release': 'Удалить этот релиз',
+    'Delete this release?': 'Удалить этот релиз?',
+    'This will delete the information for the release':
+      'Это удалит информацию о релизе',
+    'Find a release': 'Найти релиз',
+    'Choose a tag to compare': 'Выберите тег для сравнения',
+    'All reactions': 'Все реакции',
+    'Verified': 'Подтверждено',
+    'This commit was created on GitHub.com and signed with GitHub\u2019s verified signature.':
+      'Этот коммит создан на GitHub.com и подписан проверенной подписью GitHub.',
+    'This commit was created on GitHub.com and signed with GitHub\'s verified signature.':
+      'Этот коммит создан на GitHub.com и подписан проверенной подписью GitHub.',
+    'GPG key ID:': 'ID GPG-ключа:',
+    'Learn about vigilant mode': 'Подробнее о режиме бдительности',
+    'Learn about vigilant mode.': 'Подробнее о режиме бдительности.',
+    'Sorry, something went wrong.': 'К сожалению, что-то пошло не так.',
+    'Uh oh! There was an error while loading. Please reload this page.':
+      'Ой! Произошла ошибка при загрузке. Перезагрузите страницу.',
+
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 
     // Insights
     'Pulse': 'Pulse',
@@ -149,6 +187,22 @@
     'There aren’t any open issues.': 'Открытых задач нет.',
     'There aren’t any open pull requests.': 'Открытых пул-реквестов нет.',
 
+<<<<<<< HEAD
+    // === /<repo>/contribute — страница «Good first issues» ===
+    'Contribute to': 'Внесите вклад в',
+    'Make your first contribution to this repository by tackling one of the issues listed below.':
+      'Сделайте ваш первый вклад в этот репозиторий, взявшись за одну из задач ниже.',
+    'This repo doesn\u2019t have any good first issues, yet': 'В этом репозитории пока нет «задач для новичков»',
+    'This repo doesn\'t have any good first issues, yet': 'В этом репозитории пока нет «задач для новичков»',
+    'Once its maintainers label issues and pull requests for new contributors, they will begin to appear here.':
+      'Как только мейнтейнеры пометят задачи и пул-реквесты для новых контрибьюторов, они появятся здесь.',
+    'All issues in this repository': 'Все задачи в этом репозитории',
+    'good first issue': 'задача для новичков',
+    'good first issues': 'задачи для новичков',
+    'help wanted': 'нужна помощь',
+
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     // Wiki (пустая вкладка и общие строки)
     'Wikis provide a place in your repository to lay out the roadmap of your project, show the current status, and document software better, together.':
       'Wiki — это место в репозитории, где можно изложить дорожную карту проекта, показать текущий статус и вместе вести документацию.',
@@ -157,11 +211,20 @@
     'Create a custom footer': 'Создать пользовательский футер',
     'New page': 'Новая страница',
     'Edit page': 'Изменить страницу',
+<<<<<<< HEAD
+=======
     'Pages': 'Страницы',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Clone this wiki locally': 'Клонировать эту Wiki локально',
     'Show sidebar': 'Показать боковую панель',
     'Hide sidebar': 'Скрыть боковую панель',
 
+<<<<<<< HEAD
+    // Projects (пустая вкладка репозитория /<repo>/projects)
+    'Provide quick access to relevant projects.': 'Обеспечьте быстрый доступ к нужным проектам.',
+    'Add projects to view them here.': 'Добавьте проекты, чтобы видеть их здесь.',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     // Projects (пустая вкладка репозитория)
     'Projects on GitHub are created at the repository owner\u2019s level (organization or user) and can be linked to a repository\u2019s Projects tab. Projects are suitable for cross-repository development efforts such as feature work, complex product roadmaps or even Issue triage.':
       'Проекты на GitHub создаются на уровне владельца репозитория (организации или пользователя) и могут быть привязаны к вкладке Projects репозитория. Они подходят для задач, выходящих за рамки одного репозитория: работы над фичами, сложных продуктовых дорожных карт и даже для сортировки задач.',

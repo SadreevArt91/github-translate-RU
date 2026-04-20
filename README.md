@@ -42,6 +42,22 @@ Manifest V3 в Firefox имеет нюансы. Для разработки:
 - Раздел уведомлений.
 - Относительные даты («2 days ago» → «2 дня назад»).
 
+<<<<<<< HEAD
+## Что нового в 1.1.0
+
+- Новый модуль **discussions.js** — вкладка Discussions: категории (Announcements/Ideas/Polls/Q&A/Show and tell), статусы ответов, голосование, формы.
+- Большое расширение **settings.js**: разделы Security, SSH/GPG keys, Emails, Notifications, Appearance, Applications, Developer settings, Billing.
+- **profile.js**: добавлены Gists, Sponsors, Organizations, страницы /stars и /repositories.
+- **explore.js**: переведены `/marketplace` и `/marketplace/new` (Apps, Models, Pricing Plans, листинг инструмента).
+- **repo.js**: страница `/contribute` и пустое состояние `/projects`.
+- **pr.js**: пустое состояние `/pulls` и фильтр Reviews (Approved review, Reviewed by you и др.).
+- **issues.js**: переведены попапы фильтров Filter by author/assignee/label/project/milestone/reviewer.
+- **actions.js**: страница `/actions/new` (Get started, категории, блок «Learn more»).
+- **insights.js**: пустое состояние `/forks`, переключатель Switch to tree view.
+- **common.js**: общие сообщения «Try adjusting your filters», лоадер «Crunching the latest data…».
+
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 ## Что НЕ переводится (намеренно)
 
 - Содержимое `<code>`, `<pre>`, diff, blob и любых редакторов кода.
@@ -83,8 +99,16 @@ github-russian/
 │   │   ├── settings.js        — Settings (личные, репо, организация)
 │   │   ├── profile.js         — Профиль
 │   │   ├── notifications.js   — Inbox
+<<<<<<< HEAD
+│   │   ├── discussions.js     — Discussions
 │   │   ├── insights.js        — вкладка Insights
 │   │   ├── security.js        — вкладка Security
+│   │   ├── search.js          — страница поиска
+│   │   ├── explore.js         — Explore, Trending, Marketplace
+=======
+│   │   ├── insights.js        — вкладка Insights
+│   │   ├── security.js        — вкладка Security
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 │   │   ├── time.js            — относительное время (regex)
 │   │   ├── user-extras.js     — место под пользовательские добавки
 │   │   └── index.js           — агрегатор + уровни

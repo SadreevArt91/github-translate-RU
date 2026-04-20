@@ -1,0 +1,42 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Node (на случай будущего tooling)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Локальные рабочие файлы для tools/check-missing.js
+tools/input.txt
+tools/*.local.txt
+
+# Собранные архивы плагина
+*.zip
+*.crx
+*.pem
+
+# Ключи и секреты
+.env
+.env.local
+*.key
+
+# Случайные скриншоты в корне (docs/screenshots и icons/ сохраняем явно)
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.webp
+!icons/
+!docs/
+
+# Одноразовые вспомогательные скрипты сверки (не часть проекта)
+tools/*.py
+
+# Временные файлы подготовки релиза
+COMMIT_MESSAGE.md
+PROGRESS.md

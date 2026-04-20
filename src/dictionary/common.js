@@ -94,6 +94,15 @@
     'Something went wrong': 'Что-то пошло не так',
     'No results': 'Нет результатов',
     'No results matched your search.': 'По вашему запросу ничего не найдено.',
+<<<<<<< HEAD
+    'Try adjusting your search filters.': 'Попробуйте изменить фильтры поиска.',
+    'Try adjusting your filters.': 'Попробуйте изменить фильтры.',
+    'Try adjusting your search or filters.': 'Попробуйте изменить запрос или фильтры.',
+    // Лоадер на тяжёлых страницах (Insights, Pulse и т.п.)
+    'Crunching the latest data, just for you. Hang tight\u2026': 'Считаем свежие данные специально для вас. Минуточку…',
+    'Crunching the latest data, just for you. Hang tight...': 'Считаем свежие данные специально для вас. Минуточку…',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Nothing to show': 'Пока ничего нет',
 
     // Видимость

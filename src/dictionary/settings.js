@@ -7,18 +7,27 @@
     'Appearance': 'Внешний вид',
     'Accessibility': 'Доступность',
     'Notifications': 'Уведомления',
+<<<<<<< HEAD
+=======
     'Billing and plans': 'Оплата и планы',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Billing': 'Оплата',
     'Plans': 'Планы',
     'Emails': 'Электронная почта',
     'Password and authentication': 'Пароль и аутентификация',
     'Sessions': 'Сессии',
+<<<<<<< HEAD
+=======
     'SSH and GPG keys': 'Ключи SSH и GPG',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Organizations': 'Организации',
     'Enterprises': 'Корпоративные аккаунты',
     'Moderation': 'Модерация',
     'Blocked users': 'Заблокированные пользователи',
+<<<<<<< HEAD
+=======
     'Interaction limits': 'Ограничения взаимодействия',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Code review limits': 'Ограничения код-ревью',
     'Repositories': 'Репозитории',
     'Packages': 'Packages',
@@ -49,7 +58,10 @@
     'Update profile': 'Обновить профиль',
 
     // Безопасность
+<<<<<<< HEAD
+=======
     'Change password': 'Сменить пароль',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Current password': 'Текущий пароль',
     'New password': 'Новый пароль',
     'Confirm new password': 'Подтвердите новый пароль',
@@ -57,14 +69,20 @@
     '2FA is enabled': 'Двухфакторная аутентификация включена',
     '2FA is not enabled': 'Двухфакторная аутентификация не включена',
     'Enable two-factor authentication': 'Включить двухфакторную аутентификацию',
+<<<<<<< HEAD
+=======
     'Recovery codes': 'Резервные коды',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Passkeys': 'Passkey-ключи',
     'Security keys': 'Ключи безопасности',
     'Authentication methods': 'Способы входа',
 
     // Уведомления
     'Default notifications email': 'Email для уведомлений по умолчанию',
+<<<<<<< HEAD
+=======
     'Participating': 'В обсуждениях, в которых участвую',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Watching': 'За чем слежу',
     'Push notifications': 'Push-уведомления',
     'Web': 'В интерфейсе',
@@ -83,7 +101,10 @@
     'Rulesets': 'Наборы правил',
     'Webhooks': 'Webhooks',
     'Environments': 'Окружения',
+<<<<<<< HEAD
+=======
     'Pages': 'Pages',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Integrations': 'Интеграции',
     'Email notifications': 'Email-уведомления',
     'Autolink references': 'Автоссылки',
@@ -238,9 +259,12 @@
     'Allow merge commits': 'Разрешить merge-коммиты',
     'Allow squash merging': 'Разрешить squash merge',
     'Allow rebase merging': 'Разрешить rebase merge',
+<<<<<<< HEAD
+=======
     'Always suggest updating pull request branches':
       'Всегда предлагать обновление веток пул-реквестов',
     'Allow auto-merge': 'Разрешить авто-слияние',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Automatically delete head branches': 'Автоматически удалять ветки после слияния',
 
     // === Общие настройки репозитория (Repository → Settings → General) ===
@@ -360,15 +384,21 @@
     'Pull request title and commit details': 'Заголовок пул-реквеста и детали коммитов',
     'Pull request title and description': 'Заголовок и описание пул-реквеста',
     'Pull request title': 'Заголовок пул-реквеста',
+<<<<<<< HEAD
+=======
     'Allow merge commits': 'Разрешить merge-коммиты',
     'Allow squash merging': 'Разрешить squash merge',
     'Allow rebase merging': 'Разрешить rebase merge',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Always suggest updating pull request branches':
       'Всегда предлагать обновлять ветки пул-реквестов',
     'Allow auto-merge': 'Разрешить автослияние',
     'Waits for merge requirements to be met and then merges automatically.':
       'Дожидается выполнения условий слияния и сливает автоматически.',
+<<<<<<< HEAD
+=======
     'Automatically delete head branches': 'Автоматически удалять исходные ветки',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Deleted branches will remain in the repository for 90 days.':
       'Удалённые ветки сохраняются в репозитории 90 дней.',
 
@@ -613,19 +643,26 @@
     'Go to your personal profile': 'Перейти в ваш личный профиль',
 
     // Поисковая модалка — подсказки/кнопки
+<<<<<<< HEAD
+    'Query': 'Запрос',
+=======
     'Saved searches': 'Сохранённые поисковые запросы',
     'Use saved searches to filter your results more quickly':
       'Сохранённые поисковые запросы помогут быстрее фильтровать результаты',
     'Query': 'Запрос',
     'To see all available qualifiers, see our': 'Все доступные уточнения — в нашей',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Create saved search': 'Создать сохранённый поиск',
     '0 suggestions.': '0 подсказок.',
     'Give feedback': 'Оставить отзыв',
     'Provide feedback': 'Оставить отзыв',
     'Submit feedback': 'Отправить отзыв',
+<<<<<<< HEAD
+=======
     'We read every piece of feedback, and take your input very seriously.':
       'Мы читаем каждый отзыв и внимательно относимся к вашим замечаниям.',
 
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     // Горячие клавиши (подсказки в командном пальете)
     'g then d': 'g, затем d',
     'g then p': 'g, затем p',
@@ -635,6 +672,127 @@
     'to search': 'для поиска',
 
     // Флеш-сообщения GitHub (перелогин в соседней вкладке и т.п.)
+<<<<<<< HEAD
+    // Скип-линк и общие
+    // === /settings/security — Password and authentication ===
+    'Change password': 'Изменить пароль',
+    'Update password': 'Обновить пароль',
+    'Forgot password?': 'Забыли пароль?',
+    'I forgot my password': 'Я забыл пароль',
+    'Two-factor authentication is not enabled yet.': 'Двухфакторная аутентификация ещё не включена.',
+    'Disable two-factor authentication': 'Отключить двухфакторную аутентификацию',
+    'Authenticator app': 'Приложение-аутентификатор',
+    'SMS/Text message': 'SMS',
+    'Recovery codes': 'Коды восстановления',
+    'View recovery codes': 'Показать коды восстановления',
+    'Generate new recovery codes': 'Сгенерировать новые коды восстановления',
+    'Add a passkey': 'Добавить passkey',
+    'Active sessions': 'Активные сессии',
+    'Web sessions': 'Веб-сессии',
+    'Revoke session': 'Закрыть сессию',
+    'Sign out': 'Выйти',
+    'Sign in': 'Войти',
+    'Signed in as': 'Вошли как',
+
+    // === /settings/keys — SSH and GPG keys ===
+    'SSH and GPG keys': 'SSH- и GPG-ключи',
+    'SSH keys': 'SSH-ключи',
+    'GPG keys': 'GPG-ключи',
+    'Authentication keys': 'Ключи аутентификации',
+    'Signing keys': 'Ключи подписи',
+    'New SSH key': 'Новый SSH-ключ',
+    'New GPG key': 'Новый GPG-ключ',
+    'Add SSH key': 'Добавить SSH-ключ',
+    'Add GPG key': 'Добавить GPG-ключ',
+    'Key': 'Ключ',
+    'Key type': 'Тип ключа',
+    'Authentication Key': 'Ключ аутентификации',
+    'Signing Key': 'Ключ подписи',
+    'There are no SSH keys associated with your account.':
+      'К вашему аккаунту не привязан ни один SSH-ключ.',
+    'There are no GPG keys associated with your account.':
+      'К вашему аккаунту не привязан ни один GPG-ключ.',
+    'Learn how to generate a new SSH key': 'Как сгенерировать новый SSH-ключ',
+    'Vigilant mode': 'Режим бдительности',
+    'Flag unsigned commits as unverified': 'Помечать неподписанные коммиты как непроверенные',
+
+    // === /settings/emails ===
+    'Primary email address': 'Основной email',
+    'Backup email address': 'Резервный email',
+    'Add email address': 'Добавить email',
+    'Add an email address': 'Добавить email',
+    'Email preferences': 'Настройки email',
+    'Keep my email addresses private': 'Скрывать мои email-адреса',
+    'Block command line pushes that expose my email':
+      'Блокировать пуши из командной строки, раскрывающие мой email',
+    'Receive direct mentions, replies and team mentions':
+      'Получать прямые упоминания, ответы и упоминания команды',
+    'Verify email address': 'Подтвердить email',
+    'Resend verification email': 'Отправить письмо для подтверждения ещё раз',
+    'Unverified': 'Не подтверждён',
+
+    // === /settings/notifications ===
+    'Custom routing': 'Пользовательская маршрутизация',
+    'Automatically watch repositories': 'Автоматически отслеживать репозитории',
+    'Automatically watch teams': 'Автоматически отслеживать команды',
+    'Ignoring': 'Игнорирую',
+    'Email notification preferences': 'Настройки email-уведомлений',
+    'Comments on Issues and Pull Requests': 'Комментарии к задачам и пул-реквестам',
+    'Pull Request reviews': 'Ревью пул-реквестов',
+    'Pull Request pushes': 'Пуши в пул-реквесты',
+    'Your own updates': 'Ваши собственные обновления',
+    'Dependabot alerts': 'Оповещения Dependabot',
+    'Actions': 'Actions',
+
+    // === /settings/appearance ===
+    'Theme preferences': 'Настройки темы',
+    'Theme mode': 'Режим темы',
+    'Single theme': 'Одна тема',
+    'Sync with system': 'Синхронизировать с системой',
+    'Day theme': 'Светлая тема',
+    'Night theme': 'Тёмная тема',
+    'Light default': 'Светлая',
+    'Light high contrast': 'Светлая контрастная',
+    'Light Protanopia & Deuteranopia': 'Светлая для протанопии/дейтеранопии',
+    'Light Tritanopia': 'Светлая для тританопии',
+    'Dark default': 'Тёмная',
+    'Dark high contrast': 'Тёмная контрастная',
+    'Dark dimmed': 'Тёмная приглушённая',
+    'Dark Protanopia & Deuteranopia': 'Тёмная для протанопии/дейтеранопии',
+    'Dark Tritanopia': 'Тёмная для тританопии',
+    'System font': 'Системный шрифт',
+    'Use the system font': 'Использовать системный шрифт',
+    'Markdown editor font': 'Шрифт редактора Markdown',
+    'Emoji skin tone preference': 'Оттенок кожи эмодзи',
+    'Tab size preference': 'Размер табуляции',
+
+    // === /settings/applications ===
+    'Revoke access': 'Отозвать доступ',
+    'No authorized applications': 'Разрешённых приложений нет',
+
+    // === /settings/developers ===
+    'OAuth Apps': 'OAuth Apps',
+    'Personal access tokens': 'Персональные токены доступа',
+    'Fine-grained tokens': 'Токены с тонкой настройкой',
+    'Tokens (classic)': 'Токены (классические)',
+    'Revoke all': 'Отозвать все',
+    'Revoke': 'Отозвать',
+    'Delete token': 'Удалить токен',
+
+    // === /settings/billing ===
+    'Billing and plans': 'Оплата и тарифы',
+    'Plans and usage': 'Тарифы и расход',
+    'Payment method': 'Способ оплаты',
+    'Billing history': 'История платежей',
+    'Spending limit': 'Лимит расходов',
+    'Current plan': 'Текущий тариф',
+    'Downgrade': 'Сменить на меньший тариф',
+    'Start free trial': 'Начать бесплатный период',
+    'View invoice': 'Просмотреть счёт',
+    'Billing cycle': 'Платёжный цикл',
+    'Monthly': 'Ежемесячно',
+    'Yearly': 'Ежегодно',
+=======
     'You signed in with another tab or window.': 'Вы вошли в другой вкладке или окне.',
     'You signed out in another tab or window.': 'Вы вышли в другой вкладке или окне.',
     'You switched accounts on another tab or window.': 'Вы сменили аккаунт в другой вкладке или окне.',
@@ -644,6 +802,7 @@
 
     // Скип-линк и общие
     'Footer navigation': 'Навигация подвала',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 
   };
 
@@ -672,6 +831,17 @@
         'Saved': 'Сохранено',
       },
     },
+<<<<<<< HEAD
+    // 'Title' в форме SSH/GPG ключа — лучше «Название», но в общем словаре это «Заголовок».
+    // Ограничиваем по форме ключа.
+    {
+      selector: '#ssh_key_form, #gpg_key_form, form[action*="/settings/keys"], form[action*="/settings/gpg"], form[action*="/settings/ssh"]',
+      strings: {
+        'Title': 'Название',
+      },
+    },
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
   ];
 
   root.GitHubRu.dict = root.GitHubRu.dict || {};

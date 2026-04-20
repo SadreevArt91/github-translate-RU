@@ -103,7 +103,10 @@
     // Раздел Dependabot
     'Dependabot alerts will show you when any of your dependencies have vulnerabilities.':
       'Оповещения Dependabot показывают, когда у ваших зависимостей есть уязвимости.',
+<<<<<<< HEAD
+=======
     'Enable Dependabot alerts': 'Включить оповещения Dependabot',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Disable Dependabot alerts': 'Отключить оповещения Dependabot',
     'Dependabot security updates': 'Обновления безопасности Dependabot',
     'Dependabot version updates': 'Обновления версий Dependabot',
@@ -136,7 +139,10 @@
       'Сканирование кода ищет уязвимости и ошибки в коде этого репозитория.',
     'Code scanning finds vulnerabilities and errors in this repository\'s code.':
       'Сканирование кода ищет уязвимости и ошибки в коде этого репозитория.',
+<<<<<<< HEAD
+=======
     'Set up code scanning': 'Настроить сканирование кода',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Configure code scanning': 'Настроить сканирование кода',
     'Set up': 'Настроить',
     'Tool': 'Инструмент',

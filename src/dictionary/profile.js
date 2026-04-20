@@ -77,6 +77,43 @@
     'Pending invitations': 'Ожидающие приглашения',
     'Invite member': 'Пригласить участника',
     'Invite someone': 'Пригласить кого-то',
+<<<<<<< HEAD
+    'Filter members': 'Фильтр участников',
+    'Filter by role': 'Фильтр по роли',
+    'Role: All': 'Роль: все',
+    'Role: Owner': 'Роль: владелец',
+    'Role: Member': 'Роль: участник',
+    '2FA': '2FA',
+    'All 2FA': '2FA: все',
+    'Enabled 2FA': '2FA включена',
+    'Disabled 2FA': '2FA выключена',
+    'Admins': 'Админы',
+    'No one is assigned to this team yet.': 'В этой команде пока никого нет.',
+    'New team': 'Новая команда',
+    'Create new team': 'Создать команду',
+    'Remove from organization': 'Удалить из организации',
+    'Leave organization': 'Покинуть организацию',
+    'There are no pending invitations.': 'Ожидающих приглашений нет.',
+    'There are no outside collaborators.': 'Внешних коллабораторов нет.',
+    'Nested teams': 'Вложенные команды',
+    'Parent team': 'Родительская команда',
+    'Team name': 'Название команды',
+    'Your teams': 'Ваши команды',
+    'All teams': 'Все команды',
+    'Create a team': 'Создать команду',
+    'Create team': 'Создать команду',
+    'New subteam': 'Новая подкоманда',
+    'Add member': 'Добавить участника',
+    'Add a member': 'Добавить участника',
+    'Organization name': 'Имя организации',
+    'Display name': 'Отображаемое имя',
+    'Billing email': 'Email для биллинга',
+    'Twitter username': 'Имя пользователя в Twitter',
+    'Verified domains': 'Подтверждённые домены',
+    'Audit log': 'Журнал аудита',
+    'Interaction limits': 'Ограничения на взаимодействия',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 
     // === Вкладка Projects на профиле (пустое состояние) ===
     'Welcome to Projects': 'Добро пожаловать в Projects',
@@ -148,9 +185,65 @@
     'Can be sponsored': 'Можно спонсировать',
     'Mirrors': 'Зеркала',
     'Templates': 'Шаблоны',
+<<<<<<< HEAD
+
+    // === Вкладка Repositories на профиле ===
+    // 'Find a repository…' уже есть в nav.js; 'Language:' — в explore.js; 'Type' — в settings.js.
+    // Поэтому глобально здесь оставляем только специфичные ключи.
+    'Search repositories': 'Поиск репозиториев',
+    'Type:': 'Тип:',
+
+    // Stars — поиск
+    'Search stars': 'Поиск по избранному',
+
+    // === Gists (на профиле и /gist) ===
+    'All gists': 'Все gists',
+    'Starred gists': 'Избранные gists',
+    'Forked': 'Форкнутые',
+    'Create a new gist': 'Создать новый gist',
+    'Discover gists': 'Исследовать gists',
+    'Search Your Gists': 'Поиск по вашим gists',
+    // Пустое состояние
+    'You don\u2019t have any gists yet.': 'У вас пока нет ни одного gist.',
+    'You don\'t have any gists yet.': 'У вас пока нет ни одного gist.',
+    'Gists are a great way to share snippets and pastes with others.':
+      'Gists — удобный способ делиться фрагментами кода и заметками.',
+    'Create your first gist': 'Создайте свой первый gist',
+
+    // === Sponsors — базовые строки на /sponsors и блоках профиля ===
+    // (названия продукта «GitHub Sponsors» — бренд, не переводим)
+    'Become a sponsor': 'Стать спонсором',
+    'Sponsor this project': 'Поддержать этот проект',
+    'Sponsor this developer': 'Поддержать этого разработчика',
+    'Sponsoring': 'Спонсирую',
+    'Sponsoring since': 'Спонсирует с',
+    'View details': 'Подробнее',
+    'Lifetime sponsorship': 'Пожизненное спонсорство',
+    'Monthly sponsorship': 'Ежемесячное спонсорство',
+    'One-time sponsorship': 'Разовая поддержка',
+    'Private sponsor': 'Приватный спонсор',
+    'Public sponsor': 'Публичный спонсор',
+
+    // === Organizations — профиль организации ===
+    'Top languages': 'Ведущие языки',
+    'Most used topics': 'Популярные темы',
+    'Report abuse to GitHub': 'Пожаловаться GitHub',
+    'Contact GitHub support about this user\u2019s behavior.':
+      'Сообщить в поддержку GitHub о поведении этого пользователя.',
+    'Report abuse (link)': 'Пожаловаться',
+  };
+
+  const attributes = {
+    'placeholder': {
+      'Search stars': 'Поиск по избранному',
+      'Search repositories': 'Поиск репозиториев',
+    },
+  };
+=======
   };
 
   const attributes = {};
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
 
 
   // Таб "Stars" на странице профиля = "Избранное" (а не "Звёзды" из repo.js)
@@ -161,6 +254,27 @@
         'Stars': 'Избранное',
       },
     },
+<<<<<<< HEAD
+    // Фильтры на /<user>?tab=repositories и /<user>?tab=stars: Type / Language.
+    // Ограничиваем селектором списка репозиториев пользователя, чтобы не затрагивать
+    // прочие места, где встречаются слова Type/Language.
+    {
+      selector: '#user-repositories-list, #user-lists-container, #user-starred-repo-list, [data-filterable-for="your-repos-filter"], .js-repo-list',
+      strings: {
+        'Type': 'Тип',
+        'Language': 'Язык',
+        'Language:': 'Язык:',
+      },
+    },
+    // Кнопка "New" в шапке вкладки Repositories пользователя
+    {
+      selector: 'a[href$="/repositories/new"], a[href$="/new"].btn-primary',
+      strings: {
+        'New': 'Создать',
+      },
+    },
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
   ];
 
   root.GitHubRu.dict = root.GitHubRu.dict || {};

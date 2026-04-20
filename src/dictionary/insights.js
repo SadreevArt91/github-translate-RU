@@ -65,7 +65,10 @@
       'Включите Discussions, чтобы открыть Community Insights\!',
     'Discussions is the central space for your community to share announcements, ask questions, and host conversations.':
       'Discussions — центральное пространство, где сообщество может делать объявления, задавать вопросы и вести беседы.',
+<<<<<<< HEAD
+=======
     'Set up discussions': 'Настроить Discussions',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Community Insights': 'Community Insights',
 
     // Traffic
@@ -113,6 +116,11 @@
 
     // Forks (network/members)
     'No one has forked this repository yet.': 'Репозиторий ещё никто не форкнул.',
+<<<<<<< HEAD
+    'No one has forked this repository yet': 'Репозиторий ещё никто не форкнул',
+    'Switch to tree view': 'Переключить на дерево',
+=======
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Forks are a great way to contribute to a repository. After':
       'Форки — отличный способ поучаствовать в репозитории. После того как вы',
     ', you can send the original author a': ', можно отправить автору',
@@ -142,6 +150,8 @@
     'Owner': 'Владелец',
 
     // Короткие месяцы (Contributors/Commits/Network-timeline)
+<<<<<<< HEAD
+=======
     'Jan': 'янв',
     'Feb': 'фев',
     'Mar': 'мар',
@@ -155,6 +165,7 @@
     'Nov': 'ноя',
     'Dec': 'дек',
 
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     // Actions metrics
     'Period: Current month': 'Период: текущий месяц',
     'Current month': 'Текущий месяц',
@@ -181,7 +192,10 @@
     'No table data available yet.': 'Данных для таблицы пока нет.',
     'You don\'t have workflows on any of your organization repositories.':
       'В репозиториях вашей организации нет workflow-файлов.',
+<<<<<<< HEAD
+=======
     'Get started with GitHub Actions': 'Начало работы с GitHub Actions',
+>>>>>>> b233700ae40a269a5e416996bfe03aa9284bb265
     'Showing data from': 'Показаны данные с',
 
     // Highcharts a11y (статичные, безопасно)
